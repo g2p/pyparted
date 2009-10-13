@@ -1,0 +1,30 @@
+pyparted (2.2-1) unstable; urgency=low
+
+  * New upstream release.
+  * debian/patches/lower_parted_version.patch:
+    - Refresh for new upstream release.
+  * Add python-decorator to Depends too.
+
+ -- Luca Falavigna <dktrkranz@debian.org>  Tue, 13 Oct 2009 21:30:22 +0200
+
+pyparted (2.1.1-1) unstable; urgency=low
+
+  * New upstream release.
+  * debian/control:
+    - (Build-)Depend on python-decorator.
+    - Bump minimum libparted1.8-dev version to 1.8.8.git.2009.06.03.
+    - Update my e-mail address.
+    - Bump Standards-Version to 3.8.3, no changes required.
+  * debian/patches/lower_parted_version.patch:
+    - Lower required parted version, current Debian version already fulfil
+      pyparted requirements.
+  * debian/patches/no_Fedora.patch:
+    - Remove features available in Fedora's parted only.
+
+ -- Luca Falavigna <dktrkranz@debian.org>  Fri, 02 Oct 2009 02:36:35 +0200
+
+pyparted (2.0.12-1) unstable; urgency=low
+
+  * Initial release (Closes: #512011).
+
+ -- Luca Falavigna <dktrkranz@ubuntu.com>  Mon, 18 May 2009 23:52:08 +0200

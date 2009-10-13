@@ -1,0 +1,131 @@
+Description:	Do not use PyObject_HashNotImplemented, not implemented in Python 2.5 and older.
+Origin:		Debian
+Forwarded:	not-needed
+
+Index: pyparted-2.0.12/include/typeobjects/pyconstraint.h
+===================================================================
+--- pyparted-2.0.12.orig/include/typeobjects/pyconstraint.h	2009-05-18 23:48:15.000000000 +0200
++++ pyparted-2.0.12/include/typeobjects/pyconstraint.h	2009-05-18 23:49:57.000000000 +0200
+@@ -78,7 +78,7 @@
+  /* .tp_as_number = XXX */
+  /* .tp_as_sequence = XXX */
+  /* .tp_as_mapping = XXX */
+-    .tp_hash = PyObject_HashNotImplemented,
++ /* .tp_hash = XXX */
+     .tp_call = NULL,
+     .tp_str = (reprfunc) _ped_Constraint_str,
+     .tp_getattro = PyObject_GenericGetAttr,
+Index: pyparted-2.0.12/include/typeobjects/pydevice.h
+===================================================================
+--- pyparted-2.0.12.orig/include/typeobjects/pydevice.h	2009-05-18 23:48:16.000000000 +0200
++++ pyparted-2.0.12/include/typeobjects/pydevice.h	2009-05-18 23:49:57.000000000 +0200
+@@ -63,7 +63,7 @@
+  /* .tp_as_number = XXX */
+  /* .tp_as_sequence = XXX */
+  /* .tp_as_mapping = XXX */
+-    .tp_hash = PyObject_HashNotImplemented,
++ /* .tp_hash = XXX */
+     .tp_call = NULL,
+     .tp_str = (reprfunc) _ped_CHSGeometry_str,
+     .tp_getattro = PyObject_GenericGetAttr,
+@@ -227,7 +227,7 @@
+  /* .tp_as_number = XXX */
+  /* .tp_as_sequence = XXX */
+  /* .tp_as_mapping = XXX */
+-    .tp_hash = PyObject_HashNotImplemented,
++ /* .tp_hash = XXX */
+     .tp_call = NULL,
+     .tp_str = (reprfunc) _ped_Device_str,
+     .tp_getattro = PyObject_GenericGetAttr,
+Index: pyparted-2.0.12/include/typeobjects/pydisk.h
+===================================================================
+--- pyparted-2.0.12.orig/include/typeobjects/pydisk.h	2009-05-18 23:48:15.000000000 +0200
++++ pyparted-2.0.12/include/typeobjects/pydisk.h	2009-05-18 23:49:57.000000000 +0200
+@@ -84,7 +84,7 @@
+  /* .tp_as_number = XXX */
+  /* .tp_as_sequence = XXX */
+  /* .tp_as_mapping = XXX */
+-    .tp_hash = PyObject_HashNotImplemented,
++ /* .tp_hash = XXX */
+     .tp_call = NULL,
+     .tp_str = (reprfunc) _ped_Partition_str,
+     .tp_getattro = PyObject_GenericGetAttr,
+@@ -202,7 +202,7 @@
+  /* .tp_as_number = XXX */
+  /* .tp_as_sequence = XXX */
+  /* .tp_as_mapping = XXX */
+-    .tp_hash = PyObject_HashNotImplemented,
++ /* .tp_hash = XXX */
+     .tp_call = NULL,
+     .tp_str = (reprfunc) _ped_Disk_str,
+     .tp_getattro = PyObject_GenericGetAttr,
+@@ -267,7 +267,7 @@
+  /* .tp_as_number = XXX */
+  /* .tp_as_sequence = XXX */
+  /* .tp_as_mapping = XXX */
+-    .tp_hash = PyObject_HashNotImplemented,
++ /* .tp_hash = XXX */
+     .tp_call = NULL,
+     .tp_str = (reprfunc) _ped_DiskType_str,
+     .tp_getattro = PyObject_GenericGetAttr,
+Index: pyparted-2.0.12/include/typeobjects/pyfilesys.h
+===================================================================
+--- pyparted-2.0.12.orig/include/typeobjects/pyfilesys.h	2009-05-18 23:48:15.000000000 +0200
++++ pyparted-2.0.12/include/typeobjects/pyfilesys.h	2009-05-18 23:49:57.000000000 +0200
+@@ -56,7 +56,7 @@
+  /* .tp_as_number = XXX */
+  /* .tp_as_sequence = XXX */
+  /* .tp_as_mapping = XXX */
+-    .tp_hash = PyObject_HashNotImplemented,
++ /* .tp_hash = XXX */
+     .tp_call = NULL,
+     .tp_str = (reprfunc) _ped_FileSystemType_str,
+     .tp_getattro = PyObject_GenericGetAttr,
+@@ -139,7 +139,7 @@
+  /* .tp_as_number = XXX */
+  /* .tp_as_sequence = XXX */
+  /* .tp_as_mapping = XXX */
+-    .tp_hash = PyObject_HashNotImplemented,
++ /* .tp_hash = XXX */
+     .tp_call = NULL,
+     .tp_str = (reprfunc) _ped_FileSystem_str,
+     .tp_getattro = PyObject_GenericGetAttr,
+Index: pyparted-2.0.12/include/typeobjects/pygeom.h
+===================================================================
+--- pyparted-2.0.12.orig/include/typeobjects/pygeom.h	2009-05-18 23:48:16.000000000 +0200
++++ pyparted-2.0.12/include/typeobjects/pygeom.h	2009-05-18 23:49:57.000000000 +0200
+@@ -96,7 +96,7 @@
+  /* .tp_as_number = XXX */
+  /* .tp_as_sequence = XXX */
+  /* .tp_as_mapping = XXX */
+-    .tp_hash = PyObject_HashNotImplemented,
++ /* .tp_hash = XXX */
+     .tp_call = NULL,
+     .tp_str = (reprfunc) _ped_Geometry_str,
+     .tp_getattro = PyObject_GenericGetAttr,
+Index: pyparted-2.0.12/include/typeobjects/pynatmath.h
+===================================================================
+--- pyparted-2.0.12.orig/include/typeobjects/pynatmath.h	2009-05-18 23:48:15.000000000 +0200
++++ pyparted-2.0.12/include/typeobjects/pynatmath.h	2009-05-18 23:49:57.000000000 +0200
+@@ -72,7 +72,7 @@
+  /* .tp_as_number = XXX */
+  /* .tp_as_sequence = XXX */
+  /* .tp_as_mapping = XXX */
+-    .tp_hash = PyObject_HashNotImplemented,
++ /* .tp_hash = XXX */
+     .tp_call = NULL,
+     .tp_str = (reprfunc) _ped_Alignment_str,
+     .tp_getattro = PyObject_GenericGetAttr,
+Index: pyparted-2.0.12/include/typeobjects/pytimer.h
+===================================================================
+--- pyparted-2.0.12.orig/include/typeobjects/pytimer.h	2009-05-18 23:48:16.000000000 +0200
++++ pyparted-2.0.12/include/typeobjects/pytimer.h	2009-05-18 23:49:57.000000000 +0200
+@@ -73,7 +73,7 @@
+  /* .tp_as_number = XXX */
+  /* .tp_as_sequence = XXX */
+  /* .tp_as_mapping = XXX */
+-    .tp_hash = PyObject_HashNotImplemented,
++ /* .tp_hash = XXX */
+     .tp_call = NULL,
+     .tp_str = (reprfunc) _ped_Timer_str,
+     .tp_getattro = PyObject_GenericGetAttr,

@@ -1,0 +1,33 @@
+Description:	Fallback to Python 2.5
+Origin:		Debian
+Forwarded:	not-needed
+
+Index: pyparted-2.0.8/src/parted/cachedlist.py
+===================================================================
+--- pyparted-2.0.8.orig/src/parted/cachedlist.py	2009-03-22 16:57:15.000000000 +0100
++++ pyparted-2.0.8/src/parted/cachedlist.py	2009-03-22 16:57:44.000000000 +0100
+@@ -20,7 +20,10 @@
+ # Red Hat Author(s): Chris Lumens <clumens@redhat.com>
+ #
+ 
+-from collections import Sequence
++try:
++    from collections import Sequence
++except ImportError:
++    Sequence = type('Sequence', (object,), {})
+ 
+ class CachedList(Sequence):
+     """CachedList()
+Index: pyparted-2.0.8/src/parted/partition.py
+===================================================================
+--- pyparted-2.0.8.orig/src/parted/partition.py	2009-03-22 16:56:44.000000000 +0100
++++ pyparted-2.0.8/src/parted/partition.py	2009-03-22 16:56:54.000000000 +0100
+@@ -118,7 +118,7 @@
+         """The name of this partition."""
+         try:
+             return self.__partition.get_name()
+-        except parted.PartitionException as msg:
++        except parted.PartitionException:
+             return None
+ 
+     @property
