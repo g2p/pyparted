@@ -1,6 +1,6 @@
 This package was debianized by:
 
-    Luca Falavigna <dktrkranz@ubuntu.com> on Mon, 18 May 2009 23:52:08 +0200
+    Luca Falavigna <dktrkranz@debian.org> on Mon, 18 May 2009 23:52:08 +0200
 
 It was downloaded from:
 
@@ -37,7 +37,7 @@ Public License version 3 can be found in `/usr/share/common-licenses/GPL-2'.
 
 The Debian packaging is:
 
-    Copyright © 2009 Luca Falavigna <dktrkranz@debian.org>
+    Copyright © 2009-2010 Luca Falavigna <dktrkranz@debian.org>
 
 and is licensed under the GPL version 2, see above.
 

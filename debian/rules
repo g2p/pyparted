@@ -3,11 +3,11 @@
 PYTHONS := $(shell pyversions -vr debian/control)
 
 %:
-	dh --with quilt $@
+	dh $@
 
 clean:
 	rm -fr build
-	dh --with quilt $@
+	dh $@
 
 override_dh_auto_configure:
 	for pyvers in ${PYTHONS}; do \

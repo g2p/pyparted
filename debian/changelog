@@ -1,3 +1,25 @@
+pyparted (3.0-1) experimental; urgency=low
+
+  * New upstream release.
+  * debian/control:
+    - Build-depend on libparted-2.1-dev.
+    - Remove quilt from Build-Depends.
+    - Bump Standards-Version to 3.8.4, no changes required.
+    - Let python-parted-dbg depend on python-dbg (>= 2.6) | python2.6-dbg.
+  * debian/copyright:
+    - Adjust copyright years.
+  * debian/README.source:
+    - Remove it, no longer needed.
+  * debian/pyversions:
+    - Build extension for Python 2.6 only.
+  * Drop lower_parted_version.patch and no_Fedora.patch, they are no
+    longer useful because libparted 2.1 implemented those features.
+  * Drop python2.5_fallback.patch and no_HashNotImplemented.patch,
+    extension is built for Python 2.6 only, so there is no need to
+    provide compatibility for older releases.
+
+ -- Luca Falavigna <dktrkranz@debian.org>  Mon, 08 Feb 2010 17:14:53 +0100
+
 pyparted (2.2-1) unstable; urgency=low
 
   * New upstream release.

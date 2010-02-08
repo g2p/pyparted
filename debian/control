@@ -3,8 +3,8 @@ Section: python
 Priority: optional
 Maintainer: Debian Python Modules Team <python-modules-team@lists.alioth.debian.org>
 Uploaders: Luca Falavigna <dktrkranz@debian.org>
-Build-Depends: debhelper (>= 7.0.50), python-all-dev (>= 2.5), python-all-dbg (>= 2.5), python-support (>= 0.5.3), pkg-config, libparted1.8-dev (>= 1.8.8.git.2009.06.03), automake, libdevmapper-dev, uuid-dev, python-decorator, quilt (>= 0.46-7)
-Standards-Version: 3.8.3
+Build-Depends: debhelper (>= 7.0.50), python-all-dev (>= 2.5), python-all-dbg (>= 2.5), python-support, pkg-config, libparted-2.1-dev (>= 2.1), automake, libdevmapper-dev, uuid-dev, python-decorator
+Standards-Version: 3.8.4
 Homepage: http://fedorahosted.org/pyparted/
 Vcs-Svn: svn://svn.debian.org/python-modules/packages/pyparted/trunk/
 Vcs-Browser: http://svn.debian.org/viewsvn/python-modules/packages/pyparted/trunk/
@@ -18,13 +18,13 @@ Description: Python interface for libparted
  interface to libparted (http://www.gnu.org/software/parted), the GNU parted
  library for disk partitioning and file system manipulation.
  .
- This package contains Python module itself.
+ This package contains Python extension itself.
 
 Package: python-parted-dbg
 Section: debug
 Priority: extra
 Architecture: any
-Depends: ${python:Depends}, ${shlibs:Depends}, ${misc:Depends}, python-dbg (>= 2.5), python-parted (= ${binary:Version}), python-decorator
+Depends: ${python:Depends}, python-dbg (>= 2.6) | python2.6-dbg, ${shlibs:Depends}, ${misc:Depends}, python-parted (= ${binary:Version}), python-decorator
 Description: Python interface for libparted - Debugging symbols
  pyparted is a set of Python modules that provide Python programmers an
  interface to libparted (http://www.gnu.org/software/parted), the GNU parted
