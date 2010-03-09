@@ -30,7 +30,7 @@ class RequiresDeviceNode(unittest.TestCase):
     def setUp(self):
         (fd, self.path) = tempfile.mkstemp(prefix="temp-device-")
         f = os.fdopen(fd)
-        f.seek(128000)
+        f.seek(140000)
         os.write(fd, "0")
 
     def tearDown(self):
@@ -46,5 +46,5 @@ class RequiresDevice(RequiresDeviceNode):
 class RequiresDisk(RequiresDevice):
     def setUp(self):
         RequiresDevice.setUp(self)
-        pd = _ped.Disk(self._device)
+        pd = _ped.disk_new_fresh(self._device.getPedDevice(), parted.diskType["msdos"])
         self._disk = parted.Disk(PedDisk=pd)

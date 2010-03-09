@@ -155,18 +155,19 @@ PyDoc_STRVAR(disk_new_fresh_doc,
 "will have to use the commit_to_dev() method to write the new label to\n"
 "the disk.");
 
-PyDoc_STRVAR(disk_align_to_cylinders_on_doc,
-"disk_align_to_cylinders_on() -> boolean\n\n"
-"Returns True if libparted is currently set to align partitions to\n"
-"cylinder boundaries on the disk.  Returns False otherwise.");
+PyDoc_STRVAR(disk_flag_get_name_doc,
+"disk_flag_get_name(integer) -> string\n\n"
+"Return a name for a disk flag constant.  If an invalid flag is provided,\n"
+"a ValueError will be raised.");
 
-PyDoc_STRVAR(disk_align_to_cylinders_toggle_doc,
-"disk_align_to_cylinders_toggle_doc() -> boolean\n\n"
-"Toggles the align-to-cylinders setting in libparted.  The return value\n"
-"of this function indicates success or failure of the toggle operation,\n"
-"not the value of the align-to-cylinders setting.  You must still use\n"
-"disk_align_to_cylinders_on() to check the current value of the setting.\n"
-"This function returns True if it succeeds, False otherwise.");
+PyDoc_STRVAR(disk_flag_get_by_name_doc,
+"disk_flag_get_by_name(string) -> integer\n\n"
+"Return a disk flag given its name, or 0 if no flag matches the name.");
+
+PyDoc_STRVAR(disk_flag_next_doc,
+"disk_flag_next(integer) -> integer\n\n"
+"Given a disk flag, return the next flag.  If there is no next flag, 0\n"
+"is returned.");
 
 PyDoc_STRVAR(unit_set_default_doc,
 "unit_set_default(Unit)\n\n"
@@ -244,14 +245,12 @@ static struct PyMethodDef PyPedModuleMethods[] = {
                             METH_VARARGS, partition_flag_next_doc},
     {"disk_new_fresh", (PyCFunction) py_ped_disk_new_fresh,
                        METH_VARARGS, disk_new_fresh_doc},
-    {"disk_align_to_cylinders_toggle", (PyCFunction)
-                                       py_ped_disk_align_to_cylinders_toggle,
-                                       METH_VARARGS,
-                                       disk_align_to_cylinders_toggle_doc},
-    {"disk_align_to_cylinders_on", (PyCFunction)
-                                   py_ped_disk_align_to_cylinders_on,
-                                   METH_VARARGS,
-                                   disk_align_to_cylinders_on_doc},
+    {"disk_flag_get_name", (PyCFunction) py_ped_disk_flag_get_name,
+                                METH_VARARGS, disk_flag_get_name_doc},
+    {"disk_flag_get_by_name", (PyCFunction) py_ped_disk_flag_get_by_name,
+                            METH_VARARGS, disk_flag_get_by_name_doc},
+    {"disk_flag_next", (PyCFunction) py_ped_disk_flag_next,
+                            METH_VARARGS, disk_flag_next_doc},
 
     /* pyfilesys.c */
     {"file_system_probe", (PyCFunction) py_ped_file_system_probe, METH_VARARGS,
@@ -354,11 +353,6 @@ static PedExceptionOption partedExnHandler(PedException *e) {
 
 PyMODINIT_FUNC init_ped(void) {
     PyObject *m = NULL;
-
-    if (geteuid() != 0) {
-        PyErr_SetString (PyExc_RuntimeError, "pyparted requires root access");
-        return;
-    }
 
     /* init the main Python module and add methods */
     m = Py_InitModule3("_ped", PyPedModuleMethods, _ped_doc);
@@ -481,6 +475,8 @@ PyMODINIT_FUNC init_ped(void) {
     PyModule_AddIntConstant(m, "PARTITION_MSFT_RESERVED", PED_PARTITION_MSFT_RESERVED);
     PyModule_AddIntConstant(m, "PARTITION_APPLE_TV_RECOVERY", PED_PARTITION_APPLE_TV_RECOVERY);
     PyModule_AddIntConstant(m, "PARTITION_BIOS_GRUB", PED_PARTITION_BIOS_GRUB);
+
+    PyModule_AddIntConstant(m, "DISK_CYLINDER_ALIGNMENT", PED_DISK_CYLINDER_ALIGNMENT);
 
     PyModule_AddIntConstant(m, "DISK_TYPE_EXTENDED", PED_DISK_TYPE_EXTENDED);
     PyModule_AddIntConstant(m, "DISK_TYPE_PARTITION_NAME", PED_DISK_TYPE_PARTITION_NAME);

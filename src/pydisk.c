@@ -419,6 +419,10 @@ int _ped_Disk_init(_ped_Disk *self, PyObject *args, PyObject *kwds) {
     }
 
     device = _ped_Device2PedDevice(self->dev);
+    if (device == NULL) {
+        self->dev = NULL;
+        return -3;
+    }
     disk = ped_disk_new(device);
 
     if (disk == NULL) {
@@ -622,47 +626,21 @@ PyObject *py_ped_disk_clobber(PyObject *s, PyObject *args) {
     int ret = 0;
 
     device = _ped_Device2PedDevice(s);
-    if (device) {
-        ret = ped_disk_clobber(device);
-        if (ret == 0) {
-            PyErr_Format(DiskException, "Failed to clobber partition table on device %s", device->path);
-            return NULL;
-        }
-    }
-    else {
+    if (device == NULL)
         return NULL;
-    }
 
-    if (ret) {
-        Py_RETURN_TRUE;
-    } else {
-        Py_RETURN_FALSE;
-    }
-}
-
-PyObject *py_ped_disk_clobber_exclude(PyObject *s, PyObject *args) {
-    PyObject *in_disktype = NULL;
-    PedDevice *device = NULL;
-    PedDiskType *out_disktype = NULL;
-    int ret = 0;
-
-    if (!PyArg_ParseTuple(args, "O!", &_ped_DiskType_Type_obj, &in_disktype)) {
-        return NULL;
-    }
-
-    device = _ped_Device2PedDevice(s);
-    if (device == NULL) {
-        return NULL;
-    }
-
-    out_disktype = _ped_DiskType2PedDiskType(in_disktype);
-    if (out_disktype == NULL) {
-        return NULL;
-    }
-
-    ret = ped_disk_clobber_exclude(device, out_disktype);
+    ret = ped_disk_clobber(device);
     if (ret == 0) {
-        PyErr_Format(DiskException, "Failed to clobber partition table on device %s", device->path);
+        if (partedExnRaised) {
+            partedExnRaised = 0;
+
+            if (!PyErr_ExceptionMatches(PartedException) &&
+                !PyErr_ExceptionMatches(PyExc_NotImplementedError))
+                PyErr_SetString(IOException, partedExnMessage);
+        }
+        else
+            PyErr_Format(DiskException, "Failed to clobber partition table on device %s", device->path);
+
         return NULL;
     }
 
@@ -934,6 +912,169 @@ PyObject *py_ped_disk_get_max_supported_partition_count(PyObject *s,
 
     Py_INCREF(Py_None);
     return Py_None;
+}
+
+PyObject *py_ped_disk_get_partition_alignment(PyObject *s, PyObject *args) {
+    PedDisk *disk = NULL;
+    PedAlignment *alignment = NULL;
+    _ped_Alignment *ret = NULL;
+
+    disk = _ped_Disk2PedDisk(s);
+    if (!disk)
+        return NULL;
+
+    alignment = ped_disk_get_partition_alignment(disk);
+    if (!alignment) {
+        PyErr_SetString(CreateException, "Could not get alignment for device");
+        return NULL;
+    }
+
+    ret = PedAlignment2_ped_Alignment(alignment);
+    ped_alignment_destroy(alignment);
+
+    return (PyObject *) ret;
+}
+
+PyObject *py_ped_disk_max_partition_length(PyObject *s, PyObject *args) {
+    PedDisk *disk = NULL;
+
+    disk = _ped_Disk2PedDisk(s);
+    if (!disk)
+        return NULL;
+
+    return PyLong_FromUnsignedLongLong(ped_disk_max_partition_length(disk));
+}
+
+PyObject *py_ped_disk_max_partition_start_sector(PyObject *s, PyObject *args) {
+    PedDisk *disk = NULL;
+
+    disk = _ped_Disk2PedDisk(s);
+    if (!disk)
+        return NULL;
+
+    return PyLong_FromUnsignedLongLong(ped_disk_max_partition_start_sector(disk));
+}
+
+PyObject *py_ped_disk_set_flag(PyObject *s, PyObject *args) {
+    int ret, flag, state;
+    PedDisk *disk = NULL;
+
+    if (!PyArg_ParseTuple(args, "ii", &flag, &state)) {
+        return NULL;
+    }
+
+    disk = _ped_Disk2PedDisk(s);
+    if (disk == NULL) {
+        return NULL;
+    }
+
+    ret = ped_disk_set_flag(disk, flag, state);
+    if (ret == 0) {
+        if (partedExnRaised) {
+            partedExnRaised = 0;
+
+            if (!PyErr_ExceptionMatches(PartedException) &&
+                !PyErr_ExceptionMatches(PyExc_NotImplementedError))
+                PyErr_SetString(DiskException, partedExnMessage);
+        }
+        else
+            PyErr_Format(DiskException, "Could not set flag on disk %s", disk->dev->path);
+
+        return NULL;
+    }
+
+    Py_RETURN_TRUE;
+}
+
+PyObject *py_ped_disk_get_flag(PyObject *s, PyObject *args) {
+    int flag;
+    PedDisk *disk = NULL;
+
+    if (!PyArg_ParseTuple(args, "i", &flag)) {
+        return NULL;
+    }
+
+    disk = _ped_Disk2PedDisk(s);
+    if (disk == NULL) {
+        return NULL;
+    }
+
+    if (ped_disk_get_flag(disk, flag)) {
+        Py_RETURN_TRUE;
+    } else {
+        Py_RETURN_FALSE;
+    }
+}
+
+PyObject *py_ped_disk_is_flag_available(PyObject *s, PyObject *args) {
+    int flag;
+    PedDisk *disk = NULL;
+
+    if (!PyArg_ParseTuple(args, "i", &flag)) {
+        return NULL;
+    }
+
+    disk = _ped_Disk2PedDisk(s);
+    if (disk == NULL) {
+        return NULL;
+    }
+
+    if (ped_disk_is_flag_available(disk, flag)) {
+        Py_RETURN_TRUE;
+    } else {
+        Py_RETURN_FALSE;
+    }
+}
+
+PyObject *py_ped_disk_flag_get_name(PyObject *s, PyObject *args) {
+    int flag;
+    char *ret = NULL;
+
+    if (!PyArg_ParseTuple(args, "i", &flag)) {
+        return NULL;
+    }
+
+    if ((flag < PED_DISK_FIRST_FLAG) || (flag > PED_DISK_LAST_FLAG)) {
+        PyErr_SetString(PyExc_ValueError, "Invalid flag provided.");
+        return NULL;
+    }
+
+    ret = (char *) ped_disk_flag_get_name(flag);
+    if (ret == NULL) {
+        if (partedExnRaised) {
+            partedExnRaised = 0;
+
+            if (!PyErr_ExceptionMatches(PartedException) &&
+                !PyErr_ExceptionMatches(PyExc_NotImplementedError))
+                PyErr_SetString(DiskException, partedExnMessage);
+        }
+        else
+            PyErr_Format(DiskException, "Could not get disk flag name for %d", flag);
+
+        return NULL;
+    }
+
+    return PyString_FromString(ret);
+}
+
+PyObject *py_ped_disk_flag_get_by_name(PyObject *s, PyObject *args) {
+    char *name = NULL;
+
+    if (!PyArg_ParseTuple(args, "s", &name)) {
+        return NULL;
+    }
+
+    return PyLong_FromLongLong(ped_disk_flag_get_by_name(name));
+}
+
+PyObject *py_ped_disk_flag_next(PyObject *s, PyObject *args) {
+    int flag;
+
+    if (!PyArg_ParseTuple(args, "i", &flag)) {
+        return NULL;
+    }
+
+    return Py_BuildValue("i", ped_disk_flag_next(flag));
 }
 
 /*
@@ -1865,46 +2006,16 @@ PyObject *py_ped_disk_new_fresh(PyObject *s, PyObject *args) {
 
             if (!PyErr_ExceptionMatches(PartedException) &&
                 !PyErr_ExceptionMatches(PyExc_NotImplementedError))
-                PyErr_SetString(PartitionException, partedExnMessage);
+                PyErr_SetString(DiskException, partedExnMessage);
         } else {
-            PyErr_Format(PartitionException, "Could not create new disk label on %s", disk->dev->path);
+            PyErr_Format(DiskException, "Could not create new disk label on %s", disk->dev->path);
         }
-
-        return NULL;
-    }
-
-    if (!ped_disk_commit_to_dev(disk)) {
-        if (partedExnRaised) {
-            partedExnRaised = 0;
-
-            if (!PyErr_ExceptionMatches(PartedException) &&
-                !PyErr_ExceptionMatches(PyExc_NotImplementedError))
-                PyErr_SetString(PartitionException, partedExnMessage);
-        }
-        else
-            PyErr_Format(PartitionException, "Could not create new disk label on %s", disk->dev->path);
 
         return NULL;
     }
 
     ret = PedDisk2_ped_Disk(disk);
     return (PyObject *) ret;
-}
-
-PyObject *py_ped_disk_align_to_cylinders_on(PyObject *s, PyObject *args) {
-    if (ped_disk_align_to_cylinders_on()) {
-        Py_RETURN_TRUE;
-    } else {
-        Py_RETURN_FALSE;
-    }
-}
-
-PyObject *py_ped_disk_align_to_cylinders_toggle(PyObject *s, PyObject *args) {
-    if (ped_disk_align_to_cylinders_toggle()) {
-        Py_RETURN_TRUE;
-    } else {
-        Py_RETURN_TRUE;
-    }
 }
 
 /* vim:tw=78:ts=4:et:sw=4

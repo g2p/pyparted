@@ -508,15 +508,8 @@ PyObject *py_ped_device_close(PyObject *s, PyObject *args) {
     }
 }
 
-/*
- * XXX: the reason we want to call ped_device_destroy() here is
- * to unregister the device.  We need to figure out how to also
- * get a 'del' operation run on the _ped.Device itself.
- *
- * Possible solution could be to put a call to ped_device_destroy()
- * in the tp_clear function to make sure it gets unregistered.
- */
 PyObject *py_ped_device_destroy(PyObject *s, PyObject *args) {
+    _ped_Device *dev = (_ped_Device *) s;
     PedDevice *device = NULL;
 
     device = _ped_Device2PedDevice(s);
@@ -525,7 +518,14 @@ PyObject *py_ped_device_destroy(PyObject *s, PyObject *args) {
     }
 
     ped_device_destroy(device);
-    Py_CLEAR(s);
+
+    Py_CLEAR(dev->hw_geom);
+    dev->hw_geom = NULL;
+
+    Py_CLEAR(dev->bios_geom);
+    dev->bios_geom = NULL;
+
+    Py_CLEAR(dev);
 
     Py_INCREF(Py_None);
     return Py_None;
@@ -855,6 +855,94 @@ PyObject *py_ped_device_get_constraint(PyObject *s, PyObject *args) {
     }
 
     ped_constraint_destroy(constraint);
+
+    return (PyObject *) ret;
+}
+
+PyObject *py_ped_device_get_minimal_aligned_constraint(PyObject *s, PyObject *args) {
+    PedDevice *device = NULL;
+    PedConstraint *constraint = NULL;
+    _ped_Constraint *ret = NULL;
+
+    device = _ped_Device2PedDevice(s);
+    if (device == NULL) {
+        return NULL;
+    }
+
+    constraint = ped_device_get_minimal_aligned_constraint(device);
+    if (!constraint) {
+        PyErr_SetString(CreateException, "Could not create constraint");
+        return NULL;
+    }
+
+    ret = PedConstraint2_ped_Constraint(constraint);
+    ped_constraint_destroy(constraint);
+
+    return (PyObject *) ret;
+}
+
+PyObject *py_ped_device_get_optimal_aligned_constraint(PyObject *s, PyObject *args) {
+    PedDevice *device = NULL;
+    PedConstraint *constraint = NULL;
+    _ped_Constraint *ret = NULL;
+
+    device = _ped_Device2PedDevice(s);
+    if (device == NULL) {
+        return NULL;
+    }
+
+    constraint = ped_device_get_optimal_aligned_constraint(device);
+    if (!constraint) {
+        PyErr_SetString(CreateException, "Could not create constraint");
+        return NULL;
+    }
+
+    ret = PedConstraint2_ped_Constraint(constraint);
+    ped_constraint_destroy(constraint);
+
+    return (PyObject *) ret;
+}
+
+PyObject *py_ped_device_get_minimum_alignment(PyObject *s, PyObject *args) {
+    PedDevice *device = NULL;
+    PedAlignment *alignment = NULL;
+    _ped_Alignment *ret = NULL;
+
+    device = _ped_Device2PedDevice(s);
+    if (device == NULL) {
+        return NULL;
+    }
+
+    alignment = ped_device_get_minimum_alignment(device);
+    if (!alignment) {
+        PyErr_SetString(CreateException, "Could not get alignment for device");
+        return NULL;
+    }
+
+    ret = PedAlignment2_ped_Alignment(alignment);
+    ped_alignment_destroy(alignment);
+
+    return (PyObject *) ret;
+}
+
+PyObject *py_ped_device_get_optimum_alignment(PyObject *s, PyObject *args) {
+    PedDevice *device = NULL;
+    PedAlignment *alignment = NULL;
+    _ped_Alignment *ret = NULL;
+
+    device = _ped_Device2PedDevice(s);
+    if (device == NULL) {
+        return NULL;
+    }
+
+    alignment = ped_device_get_optimum_alignment(device);
+    if (!alignment) {
+        PyErr_SetString(CreateException, "Could not get alignment for device");
+        return NULL;
+    }
+
+    ret = PedAlignment2_ped_Alignment(alignment);
+    ped_alignment_destroy(alignment);
 
     return (PyObject *) ret;
 }

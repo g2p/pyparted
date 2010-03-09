@@ -17,17 +17,26 @@
 # Red Hat, Inc.
 #
 # Red Hat Author(s): Chris Lumens <clumens@redhat.com>
+#                    David Cantrell <dcantrell@redhat.com>
 #
+
 import _ped
 import unittest
+
+from baseclass import *
 
 # One class per method, multiple tests per class.  For these simple methods,
 # that seems like good organization.  More complicated methods may require
 # multiple classes and their own test suite.
-class DiskNewTestCase(unittest.TestCase):
-    # TODO
+class DiskNewUnlabeledTestCase(RequiresDevice):
     def runTest(self):
-        self.fail("Unimplemented test case.")
+        self.assertRaises(_ped.DiskLabelException, _ped.Disk, self._device)
+
+class DiskNewLabeledTestCase(RequiresLabeledDevice):
+    def runTest(self):
+        result = _ped.Disk(self._device)
+        self.assertTrue(isinstance(result, _ped.Disk))
+        self.assertEquals(result.type.name, 'msdos')
 
 class DiskGetSetTestCase(unittest.TestCase):
     # TODO
@@ -54,50 +63,86 @@ class DiskDestroyTestCase(unittest.TestCase):
     def runTest(self):
         self.fail("Unimplemented test case.")
 
-class DiskCommitTestCase(unittest.TestCase):
-    # TODO
+class DiskCommitTestCase(RequiresDisk):
     def runTest(self):
-        self.fail("Unimplemented test case.")
+        self.assertTrue(self._disk.commit())
 
-class DiskCommitToDevTestCase(unittest.TestCase):
-    # TODO
+class DiskCommitToDevTestCase(RequiresDisk):
     def runTest(self):
-        self.fail("Unimplemented test case.")
+        self.assertTrue(self._disk.commit_to_dev())
 
-class DiskCommitToOsTestCase(unittest.TestCase):
-    # TODO
+class DiskCommitToOsTestCase(RequiresDisk):
     def runTest(self):
-        self.fail("Unimplemented test case.")
+        self.assertTrue(self._disk.commit_to_os())
 
-class DiskCheckTestCase(unittest.TestCase):
-    # TODO
+class DiskCheckTestCase(RequiresDisk):
     def runTest(self):
-        self.fail("Unimplemented test case.")
+        self.assertTrue(self._disk.check())
 
 class DiskPrintTestCase(unittest.TestCase):
     # TODO
     def runTest(self):
         self.fail("Unimplemented test case.")
 
-class DiskGetPrimaryPartitionCountTestCase(unittest.TestCase):
-    # TODO
+class DiskGetPrimaryPartitionCountTestCase(RequiresDisk):
     def runTest(self):
-        self.fail("Unimplemented test case.")
+        # XXX: this could probably test more
+        self.assertEquals(self._disk.get_primary_partition_count(), 0)
 
-class DiskGetLastPartitionNumTestCase(unittest.TestCase):
-    # TODO
+class DiskGetLastPartitionNumTestCase(RequiresDisk):
     def runTest(self):
-        self.fail("Unimplemented test case.")
+        # XXX: this could probably test more
+        self.assertEquals(self._disk.get_last_partition_num(), -1)
 
-class DiskGetMaxPrimaryPartitionCountTestCase(unittest.TestCase):
-    # TODO
+class DiskGetMaxPrimaryPartitionCountTestCase(RequiresDisk):
     def runTest(self):
-        self.fail("Unimplemented test case.")
+        self.assertEquals(self._disk.get_max_primary_partition_count(), 4)
 
-class DiskGetMaxSupportedPartitionCountTestCase(unittest.TestCase):
-    # TODO
+class DiskGetMaxSupportedPartitionCountTestCase(RequiresDisk):
     def runTest(self):
-        self.fail("Unimplemented test case.")
+        self.assertEquals(self._disk.get_max_supported_partition_count(), 16)
+
+class DiskGetPartitionAlignmentTestCase(RequiresDisk):
+    def runTest(self):
+        alignment = self._disk.get_partition_alignment()
+        self.assertTrue(isinstance(alignment, _ped.Alignment))
+        # These 2 tests assume an MSDOS label as given by RequiresDisk
+        self.assertEquals(alignment.offset, 0)
+        self.assertEquals(alignment.grain_size, 1)
+
+class DiskMaxPartitionLengthTestCase(RequiresDisk):
+    def runTest(self):
+        # This test assumes an MSDOS label as given by RequiresDisk
+        self.assertEquals(self._disk.max_partition_length(), 4294967295L)
+
+class DiskMaxPartitionStartSectorTestCase(RequiresDisk):
+    def runTest(self):
+        # This test assumes an MSDOS label as given by RequiresDisk
+        self.assertEquals(self._disk.max_partition_start_sector(), 4294967295L)
+
+class DiskSetFlagTestCase(RequiresDisk):
+    def runTest(self):
+        # These 2 tests assume an MSDOS label as given by RequiresDisk
+        self._disk.set_flag(_ped.DISK_CYLINDER_ALIGNMENT, 1)
+        self.assertEquals(self._disk.get_flag(_ped.DISK_CYLINDER_ALIGNMENT), True)
+        self._disk.set_flag(_ped.DISK_CYLINDER_ALIGNMENT, 0)
+        self.assertEquals(self._disk.get_flag(_ped.DISK_CYLINDER_ALIGNMENT), False)
+
+class DiskGetFlagTestCase(RequiresDisk):
+    def runTest(self):
+        flag = self._disk.get_flag(_ped.DISK_CYLINDER_ALIGNMENT)
+        self.assertTrue(isinstance(flag, bool))
+
+class DiskIsFlagAvailableTestCase(RequiresDisk):
+    def runTest(self):
+        # We don't know which flags should be available and which shouldn't,
+        # but we can at least check that there aren't any tracebacks from
+        # trying all of the valid ones.
+        for flag in [_ped.DISK_CYLINDER_ALIGNMENT]:
+            self.assertTrue(isinstance(self._disk.is_flag_available(flag), bool))
+
+        # However, an invalid flag should definitely not be available.
+        self.assertFalse(self._disk.is_flag_available(1000))
 
 class DiskAddPartitionTestCase(unittest.TestCase):
     # TODO
@@ -154,20 +199,22 @@ class DiskGetPartitionBySectorTestCase(unittest.TestCase):
     def runTest(self):
         self.fail("Unimplemented test case.")
 
-class DiskExtendedPartitionTestCase(unittest.TestCase):
-    # TODO
+class DiskExtendedPartitionTestCase(RequiresDisk):
     def runTest(self):
-        self.fail("Unimplemented test case.")
+        self.assertRaises(_ped.PartitionException,
+                          self._disk.extended_partition)
 
-class DiskStrTestCase(unittest.TestCase):
-    # TODO
+class DiskStrTestCase(RequiresDisk):
     def runTest(self):
-        self.fail("Unimplemented test case.")
+        expected = "_ped.Disk instance --\n  dev: %s  type: %s" % \
+                   (repr(self._disk.dev), repr(self._disk.type),)
+        self.assertEquals(expected, str(self._disk))
 
 # And then a suite to hold all the test cases for this module.
 def suite():
     suite = unittest.TestSuite()
-    suite.addTest(DiskNewTestCase())
+    suite.addTest(DiskNewUnlabeledTestCase())
+    suite.addTest(DiskNewLabeledTestCase())
     suite.addTest(DiskGetSetTestCase())
     suite.addTest(DiskClobberTestCase())
     suite.addTest(DiskClobberExcludeTestCase())
@@ -182,6 +229,12 @@ def suite():
     suite.addTest(DiskGetLastPartitionNumTestCase())
     suite.addTest(DiskGetMaxPrimaryPartitionCountTestCase())
     suite.addTest(DiskGetMaxSupportedPartitionCountTestCase())
+    suite.addTest(DiskGetPartitionAlignmentTestCase())
+    suite.addTest(DiskMaxPartitionLengthTestCase())
+    suite.addTest(DiskMaxPartitionStartSectorTestCase())
+    suite.addTest(DiskSetFlagTestCase())
+    suite.addTest(DiskGetFlagTestCase())
+    suite.addTest(DiskIsFlagAvailableTestCase())
     suite.addTest(DiskAddPartitionTestCase())
     suite.addTest(DiskRemovePartitionTestCase())
     suite.addTest(DiskDeletePartitionTestCase())
