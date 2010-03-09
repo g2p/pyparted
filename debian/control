@@ -3,7 +3,7 @@ Section: python
 Priority: optional
 Maintainer: Parted Maintainer Team <parted-maintainers@lists.alioth.debian.org>
 Uploaders: Luca Falavigna <dktrkranz@debian.org>
-Build-Depends: debhelper (>= 7.0.50), python-all-dev (>= 2.5), python-all-dbg (>= 2.5), python-support, pkg-config, libparted-2.1-dev (>= 2.1), automake, libdevmapper-dev, uuid-dev, python-decorator
+Build-Depends: debhelper (>= 7.0.50), python-all-dev (>= 2.5), python-all-dbg (>= 2.5), python-support, pkg-config, libparted0-dev (>= 2.2), automake, libdevmapper-dev, uuid-dev, python-decorator
 Standards-Version: 3.8.4
 Homepage: http://fedorahosted.org/pyparted/
 Vcs-Git: git://git.debian.org/git/parted/debian/pyparted.git

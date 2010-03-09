@@ -1,9 +1,11 @@
 pyparted (3.1-1) UNRELEASED; urgency=low
 
   * New upstream release.
-  * Now maintained under Parted Maintainer Team umbrella.
+  * debian/control:
+    - Maintain package under Parted Maintainer Team umbrella.
+    - Build-depend on libparted0-dev (>= 2.2).
 
- -- Luca Falavigna <dktrkranz@debian.org>  Tue, 09 Mar 2010 21:12:08 +0100
+ -- Luca Falavigna <dktrkranz@debian.org>  Tue, 09 Mar 2010 23:28:43 +0100
 
 pyparted (3.0-1) experimental; urgency=low
 
