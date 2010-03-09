@@ -1,3 +1,53 @@
+commit 35108d4fea8b6c906f221cc7524e90dfeafbfedb
+Author: David Cantrell <dcantrell@redhat.com>
+Date:   Mon Mar 1 12:29:47 2010 -1000
+
+    New version.
+
+commit 51a33455b51bac45243141be354c8c147b222c09
+Author: David Cantrell <dcantrell@redhat.com>
+Date:   Mon Mar 1 11:52:02 2010 -1000
+
+    Prevent hangs when adding >4 partitions on an msdos labeled disk.
+    
+    The problem lies within pyparted, and to be precise within the tracking
+    of the "ownership" of PedPartition objects.
+    
+    We can have multiple python partition objects point to one PedPartition
+    and when we then remove a partition from the table, pydisk.c assumes the
+    python partition object now owns the PedPartition as it is no longer
+    part of the disk (this happens for example when temporarily removing the
+    extended partition when re-allocating partitons when doing manually
+    partitioning)
+    
+    However, we may have another python partition object pointing to that
+    same PedPartition object. If we then loose the reference which we used
+    to remove the partition from the disk, which happens when we do
+    self.partitions.invalidate() in parted/disk.py (I think). The underlying
+    PedPartition object gets destroyed / free-ed.
+    
+    Now the other python partition object (the one in the devicetree), has a
+    pointer to memory which is being re-used.
+    
+    The destroying happens because the python partition object used for
+    removing the partition from the disk thinks it is the owner as the
+    partition is no longer owned by the disk. But it is not necessarily the
+    *only* owner, yet it still destroys it.
+    
+    (Patch from Hans de Goede.)
+
+commit cad5797cafa0081946fd2a7517750e6bbc14b149
+Author: David Cantrell <dcantrell@redhat.com>
+Date:   Mon Mar 1 11:49:11 2010 -1000
+
+    Updated TODO list.
+
+commit 718e815bfa48d67a2a03b06a3484b4924fdccd03
+Author: David Cantrell <dcantrell@redhat.com>
+Date:   Mon Mar 1 11:48:51 2010 -1000
+
+    Whitespace cleanup.
+
 commit 6bb53e3a6cb7d56731c74ee5b5265905f51fea25
 Author: David Cantrell <dcantrell@redhat.com>
 Date:   Tue Jan 12 12:17:36 2010 -1000
