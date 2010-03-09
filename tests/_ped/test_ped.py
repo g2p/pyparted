@@ -72,6 +72,38 @@ class PartitionFlagNextTestCase(unittest.TestCase):
                 break
             self.assertEquals(type(flag).__name__, 'int')
 
+class DiskFlagGetNameTestCase(unittest.TestCase):
+    def runTest(self):
+        for f in [_ped.DISK_CYLINDER_ALIGNMENT]:
+            self.assertNotEquals(_ped.disk_flag_get_name(f), "", "Could not get name for flag %s" % f)
+
+        self.assertRaises(ValueError, _ped.disk_flag_get_name, -1)
+        self.assertRaises(ValueError, _ped.disk_flag_get_name, 1000)
+
+class DiskFlagGetByNameTestCase(unittest.TestCase):
+    def runTest(self):
+        for f in ["cylinder_alignment"]:
+            self.assertNotEquals(_ped.disk_flag_get_by_name(f), 0, "Could not get flag %s" % f)
+
+        self.assertEquals(_ped.disk_flag_get_by_name("nosuchflag"), 0)
+
+class DiskFlagNextTestCase(unittest.TestCase):
+    def runTest(self):
+        # We should get TypeError when the parameter is invalid
+        self.assertRaises(TypeError, _ped.disk_flag_next)
+        self.assertRaises(TypeError, _ped.disk_flag_next, 'blah')
+
+        # First flag is 0, keep getting flags until we loop back around
+        # to zero.  Make sure each flag we get is an integer.
+        flag = _ped.disk_flag_next(0)
+        self.assertEquals(type(flag).__name__, 'int')
+
+        while True:
+            flag = _ped.disk_flag_next(flag)
+            if not flag:
+                break
+            self.assertEquals(type(flag).__name__, 'int')
+
 class ConstraintNewFromMinMaxTestCase(RequiresDevice):
     def runTest(self):
         self.assertRaises(TypeError, _ped.constraint_new_from_min_max, None)
@@ -158,8 +190,8 @@ class DeviceGetTestCase(RequiresDevice):
         self.assertTrue(isinstance(_ped.device_get(self.path), _ped.Device))
 
         # Try getting a device that doesn't exist.
-        self.assertRaises(_ped.DeviceException, _ped.device_get, "/blah/whatever")
-        self.assertRaises(_ped.DeviceException, _ped.device_get, "")
+        self.assertRaises(_ped.IOException, _ped.device_get, "/blah/whatever")
+        self.assertRaises(_ped.IOException, _ped.device_get, "")
         self.assertRaises(_ped.DeviceException, _ped.device_get, None)
 
 class DeviceGetNextTestCase(unittest.TestCase, BuildList):
@@ -217,25 +249,36 @@ class DiskTypeGetNextTestCase(unittest.TestCase, BuildList):
 
         self.assertRaises(IndexError, _ped.disk_type_get_next, lst[-1])
 
-class DiskAlignToCylindersOnTestCase(unittest.TestCase):
-    # TODO
+class FileSystemProbeTestCase(RequiresFileSystem):
     def runTest(self):
-        self.fail("Unimplemented test case.")
+        type = _ped.file_system_probe(self._geometry)
 
-class DiskAlignToCylindersToggleTestCase(unittest.TestCase):
-    # TODO
-    def runTest(self):
-        self.fail("Unimplemented test case.")
+        for name in self._fileSystemType.keys():
+            if name == 'ext2':
+                self.assertEquals(type.name, name)
+            else:
+                self.assertNotEquals(type.name, name)
 
-class FileSystemProbeTestCase(unittest.TestCase):
-    # TODO
+class FileSystemProbeSpecificTestCase(RequiresFileSystem):
     def runTest(self):
-        self.fail("Unimplemented test case.")
+        for (name, type,) in self._fileSystemType.items():
+            if name == 'ext2':
+                result = _ped.file_system_probe_specific(type, self._geometry)
 
-class FileSystemProbeSpecificTestCase(unittest.TestCase):
-    # TODO
-    def runTest(self):
-        self.fail("Unimplemented test case.")
+                # XXX: this should work
+                # we're getting
+                #     ValueError: object comparing to must be a _ped.Geometry
+                # at runtime.  works fine in pdb.
+                #self.assertEquals(result, self._geometry)
+
+                self.assertTrue(isinstance(result, _ped.Geometry))
+                self.assertEquals(result.start, self._geometry.start)
+                self.assertEquals(result.end, self._geometry.end)
+                self.assertEquals(result.length, self._geometry.length)
+                self.assertEquals(result.dev, self._device)
+            else:
+                result = _ped.file_system_probe_specific(type, self._geometry)
+                self.assertEquals(result, None)
 
 class FileSystemTypeGetTestCase(unittest.TestCase):
     def runTest(self):
@@ -301,7 +344,7 @@ class UnitGetSizeTestCase(RequiresDevice):
         self.assertEquals(self._device.unit_get_size(_ped.UNIT_TEBIBYTE), 1099511627776)
         self.assertEquals(self._device.unit_get_size(_ped.UNIT_CYLINDER), 65536)
         self.assertEquals(self._device.unit_get_size(_ped.UNIT_CHS), 512)
-        self.assertEquals(self._device.unit_get_size(_ped.UNIT_PERCENT), 1280)
+        self.assertEquals(self._device.unit_get_size(_ped.UNIT_PERCENT), self._device.length * self._device.sector_size / 100)
         self.assertRaises(ValueError, self._device.unit_get_size, _ped.UNIT_COMPACT)
 
 class UnitGetNameTestCase(unittest.TestCase):
@@ -355,10 +398,11 @@ def suite():
     suite.addTest(DeviceGetNextTestCase())
     suite.addTest(DeviceProbeAllTestCase())
     suite.addTest(DeviceFreeAllTestCase())
+    suite.addTest(DiskFlagGetNameTestCase())
+    suite.addTest(DiskFlagGetByNameTestCase())
+    suite.addTest(DiskFlagNextTestCase())
     suite.addTest(DiskTypeGetTestCase())
     suite.addTest(DiskTypeGetNextTestCase())
-    suite.addTest(DiskAlignToCylindersOnTestCase())
-    suite.addTest(DiskAlignToCylindersToggleTestCase())
     suite.addTest(FileSystemProbeTestCase())
     suite.addTest(FileSystemProbeSpecificTestCase())
     suite.addTest(FileSystemTypeGetTestCase())

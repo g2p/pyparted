@@ -104,7 +104,6 @@ PyObject *py_ped_disk_type_get_next(PyObject *, PyObject *);
 PyObject *py_ped_disk_type_get(PyObject *, PyObject *);
 PyObject *py_ped_disk_type_check_feature(PyObject *, PyObject *);
 PyObject *py_ped_disk_clobber(PyObject *, PyObject *);
-PyObject *py_ped_disk_clobber_exclude(PyObject *, PyObject *);
 PyObject *py_ped_disk_duplicate(PyObject *, PyObject *);
 PyObject *py_ped_disk_destroy(PyObject *, PyObject *);
 PyObject *py_ped_disk_commit(PyObject *, PyObject *);
@@ -116,6 +115,15 @@ PyObject *py_ped_disk_get_primary_partition_count(PyObject *, PyObject *);
 PyObject *py_ped_disk_get_last_partition_num(PyObject *, PyObject *);
 PyObject *py_ped_disk_get_max_primary_partition_count(PyObject *, PyObject *);
 PyObject *py_ped_disk_get_max_supported_partition_count(PyObject *, PyObject *);
+PyObject *py_ped_disk_get_partition_alignment(PyObject *, PyObject *);
+PyObject *py_ped_disk_max_partition_length(PyObject *, PyObject *);
+PyObject *py_ped_disk_max_partition_start_sector(PyObject *, PyObject *);
+PyObject *py_ped_disk_set_flag(PyObject *, PyObject *);
+PyObject *py_ped_disk_get_flag(PyObject *, PyObject *);
+PyObject *py_ped_disk_is_flag_available(PyObject *, PyObject *);
+PyObject *py_ped_disk_flag_get_name(PyObject *, PyObject *);
+PyObject *py_ped_disk_flag_get_by_name(PyObject *, PyObject *);
+PyObject *py_ped_disk_flag_next(PyObject *, PyObject *);
 PyObject *py_ped_partition_destroy(_ped_Partition *, PyObject *);
 PyObject *py_ped_partition_is_active(_ped_Partition *, PyObject *);
 PyObject *py_ped_partition_set_flag(_ped_Partition *, PyObject *);
@@ -143,8 +151,6 @@ PyObject *py_ped_disk_get_partition(PyObject *, PyObject *);
 PyObject *py_ped_disk_get_partition_by_sector(PyObject *, PyObject *);
 PyObject *py_ped_disk_extended_partition(PyObject *, PyObject *);
 PyObject *py_ped_disk_new_fresh(PyObject *, PyObject *);
-PyObject *py_ped_disk_align_to_cylinders_on(PyObject *, PyObject *);
-PyObject *py_ped_disk_align_to_cylinders_toggle(PyObject *, PyObject *);
 
 #endif /* PYDISK_H_INCLUDED */
 

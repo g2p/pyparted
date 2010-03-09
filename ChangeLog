@@ -1,3 +1,471 @@
+commit 6bb53e3a6cb7d56731c74ee5b5265905f51fea25
+Author: David Cantrell <dcantrell@redhat.com>
+Date:   Tue Jan 12 12:17:36 2010 -1000
+
+    New version.
+
+commit 5e65db09996f927c966f465d4edd4094b43bd4bf
+Author: David Cantrell <dcantrell@redhat.com>
+Date:   Tue Jan 12 12:04:04 2010 -1000
+
+    Increment major version due to libparted API change.
+    
+    We now required libparted 2.1 or higher.  The new major version number
+    of pyparted is 3 to reflect this API change.
+
+commit b11e639a72cba9babd6c9fb602315c4654e74463
+Author: Hans de Goede <hdegoede@redhat.com>
+Date:   Mon Jan 11 04:15:46 2010 -1000
+
+    Remove py_disk_clobber_exclude binding
+    
+    py_disk_clobber_exclude has been removed from libparted-2.1, which is the
+    release we are targetting, so remove the binding for it.
+
+commit 68caa14be4c42c30800ed1ccb8135a8dcb19cccd
+Author: David Cantrell <dcantrell@redhat.com>
+Date:   Sat Dec 19 12:31:27 2009 -1000
+
+    Note the rpmlog target in the RELEASE instructions.
+
+commit 2a186a98fa0057586b271f568d83a9d283340e14
+Author: David Cantrell <dcantrell@redhat.com>
+Date:   Sat Dec 19 12:29:50 2009 -1000
+
+    Add an rpmlog target in the Makefile.
+    
+    The idea of rpmlog in the pyparted project is that the package can run
+    'make rpmlog' in the git project and get a changelog entry suitable for
+    pasting in to the spec file.  Copied more or less from anaconda.
+
+commit 06c8b72f5286f8ea89e6c4fd2303b812fa27b55b
+Author: David Cantrell <dcantrell@redhat.com>
+Date:   Sat Dec 19 11:27:10 2009 -1000
+
+    New version.
+
+commit b8f008389c47f67e99b1dd82ffc707dbb7a565d3
+Author: David Cantrell <dcantrell@redhat.com>
+Date:   Sat Dec 19 11:24:34 2009 -1000
+
+    Update release instructions.
+    
+    Future work item:  Want to remove the '-devel' thing and just have it
+    generate a .gitXXXXXX thing that gets tacked on to the release number if
+    you build from the git repo and not a release version.
+
+commit b699f0c4ffb9b74ed9707b5f70959e9f731b7472
+Author: David Cantrell <dcantrell@redhat.com>
+Date:   Fri Dec 18 13:48:09 2009 -1000
+
+    Remove old cylinder alignment test cases for _ped.
+    
+    Removed DiskAlignToCylindersOnTestCase and
+    DiskAlignToCylindersToggleTestCase as those functions have been removed
+    from pyparted.
+
+commit a5abd138e07fce7704b8b6771fcabfbe0881fe75
+Author: Hans de Goede <hdegoede@redhat.com>
+Date:   Fri Dec 18 01:25:21 2009 -1000
+
+    Add tests for max partition length / start sector
+
+commit ae1747149a4bcba03f2a508de835b082c948968a
+Author: Hans de Goede <hdegoede@redhat.com>
+Date:   Fri Dec 18 01:25:20 2009 -1000
+
+    Add _pedmodule and parted functions for max partition length / start sector
+    
+    parted-2.1 and Fedora's parted-1.9.0-24, add functions for querying the
+    maximum partition length and start sector a disk's label can represent.
+    This patch adds _pedmodule and parted module support for these functions.
+
+commit 0692b1e24550df9d4d52606a29c41a94058091cb
+Author: Hans de Goede <hdegoede@redhat.com>
+Date:   Fri Dec 18 01:25:19 2009 -1000
+
+    Remove align_to_cylinders function bindings
+    
+    The ped_disk_align_to_cylinders_on() and ped_disk_align_to_cylinders_toggle()
+    functions were never in upstream parted, so remove their bindings from
+    pyparted.
+
+commit 294471ccc094eec927a3a71bb564ab928cd2814d
+Author: Hans de Goede <hdegoede@redhat.com>
+Date:   Fri Dec 18 01:25:18 2009 -1000
+
+    Add tests for disk flag methods
+
+commit a5a6ea60fbf2fef4f8d8062b0fcc5e87e3b7cba7
+Author: Hans de Goede <hdegoede@redhat.com>
+Date:   Fri Dec 18 01:25:17 2009 -1000
+
+    Add _pedmodule and parted functions for per disk flags
+    
+    parted-2.1 and Fedora's parted-1.9.0-24, add functions for having per
+    disk flags (instead of per partition). These are used to enable / disable
+    cylinder alignment on disklabels where it is optional (the Fedora specific
+    patch which add the toggleAlignToCylinders function was not accepted
+    upstream).
+    
+    This patch adds _pedmodule and parted module support for these flags,
+    this support is modelled after the partition flags and works identically.
+
+commit 738c6e04a0411b6a2786551f44a1c0f38b7b13ff
+Author: David Cantrell <dcantrell@redhat.com>
+Date:   Thu Dec 10 14:08:40 2009 -1000
+
+    Every tuple member requires a comma after it.
+
+commit c9d43ab4768febbad0cea7673a267e80567c22c0
+Author: David Cantrell <dcantrell@redhat.com>
+Date:   Thu Dec 10 14:04:33 2009 -1000
+
+    Fill out a lot of simple _ped.Disk test cases.
+
+commit 7faa9a1d2ab79759214ff3bfb64736e1abfbf461
+Author: David Cantrell <dcantrell@redhat.com>
+Date:   Thu Dec 10 14:04:03 2009 -1000
+
+    Disable DeviceDestroyTestCase for now.
+    
+    Need online Python API reference and I'm currently over the Pacific
+    Ocean.
+
+commit 70590a7bd38453584018dc980b8e5cdc478edad1
+Author: David Cantrell <dcantrell@redhat.com>
+Date:   Thu Dec 10 14:03:13 2009 -1000
+
+    Add RequiresLabeledDevice to tests/_ped/baseclass.py.
+    
+    This base test class extends RequiresDevice.  All it does on top of
+    RequiresDevice is run parted to label the temporary device with an msdos
+    disk label.
+
+commit 05cbb0df9767a13d241616ab10347edf361b77aa
+Author: David Cantrell <dcantrell@redhat.com>
+Date:   Thu Dec 10 13:33:20 2009 -1000
+
+    Attempt at fixing _ped.Device.destroy(), no dice.
+    
+    Stashing work for now.
+
+commit de3451fa3ab1f51b60d01615ea70f37560f878a9
+Author: David Cantrell <dcantrell@redhat.com>
+Date:   Thu Dec 10 13:07:36 2009 -1000
+
+    Fix UnitFormatCustomTestCase and UnitFormatTestCase.
+    
+    Fix UNIT_PERCENT handling in these test cases.
+
+commit e87fa26bb3678b1d6451ca6b6c939ecf038b8682
+Author: David Cantrell <dcantrell@redhat.com>
+Date:   Thu Dec 10 12:56:22 2009 -1000
+
+    Fix UnitFormatCustomByteTestCase and UnitFormatByteTestCase.
+    
+    The UNIT_PERCENT handling was incorrect.  Compute actual percentage
+    based on the byte value we're using in the test case and the value of
+    unit_get_size() for UNIT_PERCENT.
+
+commit 51b633ae85843864eb5c864083176124a041ede9
+Author: David Cantrell <dcantrell@redhat.com>
+Date:   Thu Dec 10 09:41:55 2009 -1000
+
+    Add DeviceStrTestCase, disable DeviceDestroyTestCase.
+    
+    Added DeviceStrTestCase.  Disabled DeviceDestroyTestCase as it's
+    producing gc errors.
+
+commit 218c7e56771ec06cef1912782b7d3438b565a190
+Author: David Cantrell <dcantrell@redhat.com>
+Date:   Thu Dec 10 09:21:35 2009 -1000
+
+    Add DeviceDestroyTestCase and DeviceCacheRemoveTestCase.
+
+commit f68aec424772ba97bb4975f9c1f606d7830729f9
+Author: David Cantrell <dcantrell@redhat.com>
+Date:   Thu Dec 3 10:22:01 2009 -1000
+
+    Implemented ConstraintIsSolutionTestCase().
+
+commit 958118342e57b64ba63410624bcd57d1509eb330
+Author: David Cantrell <dcantrell@redhat.com>
+Date:   Thu Dec 3 10:12:38 2009 -1000
+
+    Implement ConstraintSolveMaxTestCase().
+
+commit ba9cde5bb3259ddbc596bb62685d00aba282f818
+Author: David Cantrell <dcantrell@redhat.com>
+Date:   Thu Dec 3 09:42:12 2009 -1000
+
+    Implement ConstraintSolveNearestTestCase().
+
+commit 7147b9cc7aa9dcdba4aeec48ee5354557ec60377
+Author: David Cantrell <dcantrell@redhat.com>
+Date:   Wed Dec 2 10:34:15 2009 -1000
+
+    Correct py_ped_file_system_probe_specific() for NULL returns.
+    
+    If the filesystem you try to probe for is not found in the geometry
+    region specific, libparted returns NULL.  It may also raise an exception
+    from the filesystem code, but it does not seem appropriate to raise that
+    here.  I could be wrong, but I changed this function so on detection
+    failures, we just return None.  That seems more appropriate to the use
+    of this function in Python.
+
+commit 0c05af36ecdfa4ef82c10e97836215b59184a2d9
+Author: David Cantrell <dcantrell@redhat.com>
+Date:   Wed Dec 2 10:33:22 2009 -1000
+
+    Implement FileSystemProbeSpecificTestCase().
+    
+    Use ext2 and probe for that explicitly.  The equals test for the
+    resulting geometry there is not working correctly, so the test case
+    manually does the geometry richcompre.
+    
+    For other filesystem types, the specific probe returns None.
+
+commit 4ed0178467006ba04191632a84acfa520b02c7ad
+Author: David Cantrell <dcantrell@redhat.com>
+Date:   Tue Dec 1 11:40:42 2009 -1000
+
+    Implement FileSystemProbeTestCase().
+    
+    Extend RequiresFileSystem and make sure the probed filesystem is ext2
+    and not any of the other ones available.
+
+commit abe5c09b047ba82394ed790ace9d432b85dd97b9
+Author: David Cantrell <dcantrell@redhat.com>
+Date:   Tue Dec 1 11:39:47 2009 -1000
+
+    Add RequiresFileSystem to tests/_ped/baseclass.py.
+    
+    If a test case needs a device with a file system on it,
+    RequiresFileSystem will do that.  It creates an empty file and puts an
+    ext2 filesystem on it.
+
+commit 3adf9a486afd8f64ada4f916de2d889cef68f187
+Author: David Cantrell <dcantrell@redhat.com>
+Date:   Tue Dec 1 09:40:32 2009 -1000
+
+    Add disk alignment test cases in test_ped.py.
+    
+    Added the following test cases:
+        DiskAlignToCylindersOnTestCase()
+        DiskAlignToCylindersToggleTestCase()
+
+commit 0c65865b3c6dbd34c24ce53498a1cf458d3d57fa
+Author: David Cantrell <dcantrell@redhat.com>
+Date:   Tue Dec 1 07:12:04 2009 -1000
+
+    Fix CHSGeometryStrTestCase().
+
+commit 6bf3dc2075ed290899dc79f92f4ccdbfa3d81412
+Author: David Cantrell <dcantrell@redhat.com>
+Date:   Tue Dec 1 07:07:17 2009 -1000
+
+    Fix ConstraintDuplicateTestCase...finally.
+    
+    The test case for this one was mostly wrong.  Each object in the
+    _ped.Constraint will have a different repr() than the source, so we need
+    to validate those with assertNotEquals().  But we do assertEquals() and
+    check all (well, most) of the actual values in the constraint.
+
+commit 29acecb0cb609256ad0183192c58258f6de7f945
+Author: David Cantrell <dcantrell@redhat.com>
+Date:   Tue Dec 1 07:05:32 2009 -1000
+
+    Put a deprecation warning in py_ped_constraint_duplicate().
+    
+    Even though the goal of the _ped module is to create a complete Python
+    API of libparted, some public functions in libparted just seem
+    unnecessary in a Python module.  The duplicate() functions are among
+    these.  In Python we can do a copy.deepcopy() and get the same effect
+    that the libparted duplicate functions provide.  Put a deprecation
+    warning in this function to alert users that it will eventually go away
+    and they could just use a copy.deepcopy() instead.
+
+commit cfb1d2271bb55600c7acba2ddd7230a1888ce874
+Author: David Cantrell <dcantrell@redhat.com>
+Date:   Tue Dec 1 06:13:06 2009 -1000
+
+    Note that we need parted from Fedora for pyparted.
+    
+    Upstream parted is not releasing versions of parted to ftp.gnu.org, but
+    rather pulling patches in to individual distribution offerings.  Very
+    annoying, but I am not upstream parted anymore, so I can only complain.
+
+commit c0798ba64c627acea31d071c449e55a4fad01e2d
+Author: David Cantrell <dcantrell@redhat.com>
+Date:   Mon Nov 30 11:52:29 2009 -1000
+
+    Fix UnitGetSizeTestCase in _ped test cases for _ped.UNIT_PERCENT.
+
+commit c411cb4ec91a93248a28bd82d908a9a95580344c
+Author: Hans de Goede <hdegoede@redhat.com>
+Date:   Mon Nov 16 11:37:32 2009 +0100
+
+    Add testcase for new _ped disk get_partition_alignment method
+
+commit a9de087daa3ed5abb42df49b7e06b12104cfa075
+Author: David Cantrell <dcantrell@redhat.com>
+Date:   Fri Nov 6 15:29:16 2009 -1000
+
+    New version.
+
+commit 1da479c307e7d168bf2b9eafbd6aaecc7d60b1e7
+Author: David Cantrell <dcantrell@redhat.com>
+Date:   Wed Nov 4 14:37:38 2009 -1000
+
+    Update TODO list.
+
+commit a57751ffe9b655d5c90c558e34eee4785484bbe4
+Author: Hans de Goede <hdegoede@redhat.com>
+Date:   Thu Nov 5 23:56:26 2009 -1000
+
+    Use PedDevice length instead of DIY (#532023)
+    
+    Use PedDevice length instead of calculating it ourself based on the
+    BIOS Geometry. Using BIOS Geometry gives the wrong answer for DASD disks
+    and partitions (as the actual sector size is 4096 but parted fakes 512
+    bytes sectors). And can also give the wrong answer for very large disks.
+
+commit 2674a71fd2ca7aaeb28cf1577acfec124eb9747f
+Author: Hans de Goede <hdegoede@redhat.com>
+Date:   Thu Nov 5 23:56:25 2009 -1000
+
+    Use sectorSize not physicalSectorSize for size calculations
+    
+    physicalSectorSize is the sector size on the platters of the disk,
+    where as sectorSize (which is the logical sector size) is the sector
+    size seen in the (s)ata / scsi commands and on higher levels.
+    
+    IOW physical sector sizer is for informational purposes only, geometry,
+    alignments, etc. Are always expressed in logical sector sizes, so
+    we should use sectorSize in size calculations.
+
+commit 843ddc0324255027aa30cf1b2810f3c0fee243d9
+Author: David Cantrell <dcantrell@redhat.com>
+Date:   Tue Nov 3 13:56:51 2009 -1000
+
+    New version.
+
+commit 059ea0a6a3a5129d43ee56d93a61d9fe5a9539a5
+Author: David Cantrell <dcantrell@redhat.com>
+Date:   Tue Nov 3 11:57:48 2009 -1000
+
+    Remove root user requirement in _ped.
+
+commit 28f095ace135d98b577d62f7361f31278ce3ffb9
+Author: Hans de Goede <hdegoede@redhat.com>
+Date:   Fri Oct 30 02:03:03 2009 -1000
+
+    Add testcases for new _ped device methods
+
+commit a78da84200f05808db6468dac2ceb60ac499cf3b
+Author: Hans de Goede <hdegoede@redhat.com>
+Date:   Thu Oct 29 10:21:13 2009 -1000
+
+    Add python wrapper for new PedDisk partition alignment info function
+
+commit 99e192eb62248f1171bc9903b797a0ebd7827e17
+Author: Hans de Goede <hdegoede@redhat.com>
+Date:   Thu Oct 29 10:21:12 2009 -1000
+
+    Add support for new PedDisk parition alignment info function
+
+commit 6bd5a69cefd209d9d02905d92f19bcb806a2ab7a
+Author: Hans de Goede <hdegoede@redhat.com>
+Date:   Thu Oct 29 10:21:10 2009 -1000
+
+    Add python wrappers for new PedDevice alignment info functions
+
+commit 799a9c4c038f697d495128550492b27cdaa4fbf1
+Author: Hans de Goede <hdegoede@redhat.com>
+Date:   Thu Oct 29 10:21:09 2009 -1000
+
+    Add support for new PedDevice alignment info functions
+
+commit a88b6536dc21855c1ec381dad7000a3e7ef7446f
+Author: Chris Lumens <clumens@redhat.com>
+Date:   Tue Nov 3 16:28:28 2009 -0500
+
+    Fix a whole pile of test cases.
+
+commit 81cc7c9c22de5b8b65e3de23a066906c6f9d79fc
+Author: Hans de Goede <hdegoede@redhat.com>
+Date:   Thu Oct 29 10:21:14 2009 -1000
+
+    Remove ped_disk_commit_to_dev() call from py_ped_disk_new_fresh()
+    
+    Remove ped_disk_commit_to_dev() call from py_ped_disk_new_fresh(),
+    py_ped_disk_new_fresh() should just create a new in memory disklabel
+    object and not cause any on disk changes (just like the libparted
+    equivalent), the commit was probably added in the past to workaround the
+    bug fixed by commit ac80c5ae274ed572bf6ed7fc65c2473205497e77
+
+commit 2e05d162f8ab6de36b4e3181ccdba7649a5d6dda
+Author: Hans de Goede <hdegoede@redhat.com>
+Date:   Thu Oct 29 10:21:11 2009 -1000
+
+    Fix error in Constraint __str__ method
+
+commit 3ddb1df4fcce4910e3cb1e476f773cbdab21dec5
+Author: Hans de Goede <hdegoede@redhat.com>
+Date:   Mon Oct 5 14:12:07 2009 +0200
+
+    Make _ped_Device2PedDevice properly set / throw exceptions
+    
+    Make _ped_Device2PedDevice properly set / throw exceptions when
+    ped_device_get() fails.
+
+commit 8fb2756fe45a37387984b08205a4c02d5ba4852e
+Author: Hans de Goede <hdegoede@redhat.com>
+Date:   Mon Oct 5 14:10:41 2009 +0200
+
+    Fixup various errorhandling issues in pydisk.c
+    
+    This patch fixes:
+    1) The not checking of partedExnRaised in
+       py_ped_disk_clobber() and py_ped_disk_clobber_exclude()
+    
+    2) The return of NULL without setting any sort of python exception in
+       py_ped_disk_new_fresh() when ped_disk_new_fresh() fails.
+    
+    3) The leaking of the just created fresh disk when ped_disk_commit_to_dev()
+       fails in py_ped_disk_new_fresh().
+    
+    4) Make py_ped_disk_new_fresh() throw DiskExceptions not PartitionExceptions
+
+commit caabe8f52c6a80c476dc3b4ece3344c613885819
+Author: Hans de Goede <hdegoede@redhat.com>
+Date:   Mon Oct 5 13:19:20 2009 +0200
+
+    Add missing _ped_Device2PedDevice() retval checks
+    
+    Add missing check for the retval of _ped_Device2PedDevice() in
+    _ped_Geometry_init() and _ped_Disk_init().
+
+commit 6f8982745750d12842fcee92c19110b14cb18e93
+Author: Chris Lumens <clumens@redhat.com>
+Date:   Mon Oct 5 09:46:40 2009 -0400
+
+    Use libparted commit() for parted.disk.Disk.commit() (hdegoede).
+    
+    Currently we are using python code to combine the commit_to_dev and
+    commit_to_os to get commit() however libparted has a native function for this.
+    Using this removes an open / close of the device node and thus an udev change
+    event and unnecessary udev rule scanning. Note that for the unnecessary open /
+    close to be really gone we need a libparted with commit
+    ad25892bb995f61b0ddf801ed1f74e0b1e7390ce.
+    
+    Note that this effectively backs out a previous patch to the commit function
+    that was needed because of errors in libparted.  With the above mentioned
+    libparted commit, this is fixed and we no longer need our workaround.
+    
+    https://fedorahosted.org/pyparted/ticket/24
+
 commit 6b068de8f952ea0d4caa7ff4f0fe35e9825d1b43
 Author: David Cantrell <dcantrell@redhat.com>
 Date:   Fri Oct 2 15:56:59 2009 -1000

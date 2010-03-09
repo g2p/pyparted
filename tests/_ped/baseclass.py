@@ -27,12 +27,40 @@ import unittest
 # Base class for any test case that requires a _ped.Device object first.
 class RequiresDevice(unittest.TestCase):
     def setUp(self):
-        (fd, self.path) = tempfile.mkstemp(prefix="temp-device-")
+        (fd, self.path,) = tempfile.mkstemp(prefix="temp-device-")
         f = os.fdopen(fd)
-        f.seek(128000)
+        f.seek(140000)
         os.write(fd, "0")
 
         self._device = _ped.device_get(self.path)
+
+    def tearDown(self):
+        os.unlink(self.path)
+
+# Base class for any test case that requires a filesystem on a device.
+class RequiresFileSystem(unittest.TestCase):
+    def setUp(self):
+        self._fileSystemType = {}
+        type = _ped.file_system_type_get_next()
+        self._fileSystemType[type.name] = type
+
+        while True:
+            try:
+                type = _ped.file_system_type_get_next(type)
+                self._fileSystemType[type.name] = type
+            except:
+                break
+
+        (fd, self.path,) = tempfile.mkstemp(prefix="temp-device-")
+        f = os.fdopen(fd)
+        f.seek(140000)
+        os.write(fd, "0")
+        f.close()
+
+        os.system("/sbin/mke2fs -F -q %s" % (self.path,))
+
+        self._device = _ped.device_get(self.path)
+        self._geometry = _ped.Geometry(self._device, 0, self._device.length - 1)
 
     def tearDown(self):
         os.unlink(self.path)
@@ -89,11 +117,17 @@ class RequiresDeviceAlignment(RequiresDevice):
         else:
             return b
 
+# Base class for any test case that requires a labeled device
+class RequiresLabeledDevice(RequiresDevice):
+    def setUp(self):
+        RequiresDevice.setUp(self)
+        os.system("/sbin/parted -s %s mklabel msdos" % (self.path,))
+
 # Base class for any test case that requires a _ped.Disk.
 class RequiresDisk(RequiresDevice):
     def setUp(self):
         RequiresDevice.setUp(self)
-        self._disk = _ped.Disk(self._device)
+        self._disk = _ped.disk_new_fresh(self._device, _ped.disk_type_get("msdos"))
 
 # Base class for any test case that requires a filesystem made and mounted.
 class RequiresMount(RequiresDevice):

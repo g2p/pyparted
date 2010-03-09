@@ -45,6 +45,7 @@ from constraint import Constraint
 from device import Device
 from disk import Disk
 from disk import diskType
+from disk import diskFlag
 from filesystem import FileSystem
 from filesystem import fileSystemType
 from geometry import Geometry
@@ -104,6 +105,8 @@ from _ped import PARTITION_PREP
 from _ped import PARTITION_MSFT_RESERVED
 from _ped import PARTITION_APPLE_TV_RECOVERY
 from _ped import PARTITION_BIOS_GRUB
+
+from _ped import DISK_CYLINDER_ALIGNMENT
 
 from _ped import DISK_TYPE_EXTENDED
 from _ped import DISK_TYPE_PARTITION_NAME
@@ -289,24 +292,6 @@ def freshDisk(device, ty):
 
     peddisk = disk_new_fresh(device.getPedDevice(), ty)
     return Disk(PedDisk=peddisk)
-
-@localeC
-def isAlignToCylinders():
-    """Returns True if libparted is currently set to align partitions
-       to cylinder boundaries.
-    """
-    from _ped import disk_align_to_cylinders_on
-
-    return disk_align_to_cylinders_on()
-
-@localeC
-def toggleAlignToCylinders():
-    """Toggles the align-to-cylinders setting in libparted.  You must still
-       use the isAlignToCylinders() method to check the value.
-    """
-    from _ped import disk_align_to_cylinders_toggle
-
-    return disk_align_to_cylinders_toggle()
 
 @localeC
 def version():

@@ -136,6 +136,43 @@ PyDoc_STRVAR(disk_get_max_supported_partition_count_doc,
 "get_max_supported_partition_count(self) -> integer\n\n"
 "Get the highest supported partition number of this disk.");
 
+PyDoc_STRVAR(disk_get_partition_alignment_doc,
+"get_partition_alignment(self) -> Alignment\n\n"
+"Get the alignment needed for partition boundaries on this disk.\n"
+"The returned alignment describes the alignment for the start sector\n"
+"of the partition, for all disklabel types which require alignment,\n"
+"except Sun disklabels, the end sector must be aligned too.\n"
+"To get the end sector alignment decrease the PedAlignment offset by 1.\n");
+
+PyDoc_STRVAR(disk_max_partition_length_doc,
+"max_partition_length(self) -> long\n\n"
+"This returns the maximum length for a partition the label on this disk\n"
+"can represent. This does not necessarily mean that there is enough\n"
+"freespace to create such a partition.\n"
+"If this information is not available 0 is returned");
+
+PyDoc_STRVAR(disk_max_partition_start_sector_doc,
+"max_partition_start_sector(self) -> long\n\n"
+"This returns the maximum partition start sector the label on this disk\n"
+"can represent.\n"
+"If this information is not available 0 is returned");
+
+PyDoc_STRVAR(disk_set_flag_doc,
+"set_flag(self, flag, state) -> boolean\n\n"
+"Sets the state of the given flag on self .\n"
+"If provided with an invalid flag for the disk's label,\n"
+"a PartedException is raised.");
+
+PyDoc_STRVAR(disk_get_flag_doc,
+"get_flag(self, flag) -> boolean\n\n"
+"Return the state of the given flag on self.  There is no check for invalid\n"
+"flag types, so these will always return 0.  It is therefore recommended to\n"
+"call self.is_flag_available() first to make sure.");
+
+PyDoc_STRVAR(disk_is_flag_available_doc,
+"is_flag_available(self, flag) -> boolean\n\n"
+"Return whether the given flag is valid for self.");
+
 PyDoc_STRVAR(disk_add_partition_doc,
 "add_partition(self, Partition, Constraint) -> boolean\n\n"
 "Adds the new partition Partition to self.  This operation may modify the\n"
