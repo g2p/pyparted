@@ -1,4 +1,4 @@
-pyparted (3.1-1) UNRELEASED; urgency=low
+pyparted (3.1-1) experimental; urgency=low
 
   * New upstream release.
   * debian/control:
@@ -6,7 +6,7 @@ pyparted (3.1-1) UNRELEASED; urgency=low
     - Build-depend on libparted0-dev (>= 2.2).
     - Remove some build-dependencies, pulled by lipparded0-dev already.
 
- -- Luca Falavigna <dktrkranz@debian.org>  Tue, 09 Mar 2010 23:33:45 +0100
+ -- Luca Falavigna <dktrkranz@debian.org>  Tue, 09 Mar 2010 23:35:30 +0100
 
 pyparted (3.0-1) experimental; urgency=low
 
