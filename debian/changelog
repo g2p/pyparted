@@ -1,3 +1,15 @@
+pyparted (3.1-3) UNRELEASED; urgency=low
+
+  * Switch to format 3.0 (quilt).
+  * debian/control:
+    - Add autoconf, automake and libtool to Build-Depends.
+    - Add autoconf2.13 and automake1.4 to Build-Conflicts.
+  * debian/rules:
+    - Run "autoreconf -fi -I m4" for every Python build instance to get
+      proper autoconf/libtool fixes.
+
+ -- Luca Falavigna <dktrkranz@debian.org>  Thu, 22 Apr 2010 23:39:22 +0200
+
 pyparted (3.1-2) unstable; urgency=low
 
   * debian/rules:
