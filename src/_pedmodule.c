@@ -316,11 +316,18 @@ PyObject *py_pyparted_version(PyObject *s, PyObject *args) {
  */
 static PedExceptionOption partedExnHandler(PedException *e) {
     switch (e->type) {
-        /* Ignore these for now. */
+        /* Raise yes/no exceptions so the caller can deal with them,
+         * otherwise ignore */
         case PED_EXCEPTION_INFORMATION:
         case PED_EXCEPTION_WARNING:
-            partedExnRaised = 0;
-            return PED_EXCEPTION_IGNORE;
+            if (e->options == PED_EXCEPTION_YES_NO) {
+                partedExnRaised = 1;
+                PyErr_SetString (PartedAskException, e->message);
+                return PED_EXCEPTION_CANCEL;
+            } else {
+                partedExnRaised = 0;
+                return PED_EXCEPTION_IGNORE;
+            }
 
         /* Set global flags so parted module methods can raise specific
          * exceptions with the message.
@@ -475,6 +482,7 @@ PyMODINIT_FUNC init_ped(void) {
     PyModule_AddIntConstant(m, "PARTITION_MSFT_RESERVED", PED_PARTITION_MSFT_RESERVED);
     PyModule_AddIntConstant(m, "PARTITION_APPLE_TV_RECOVERY", PED_PARTITION_APPLE_TV_RECOVERY);
     PyModule_AddIntConstant(m, "PARTITION_BIOS_GRUB", PED_PARTITION_BIOS_GRUB);
+    PyModule_AddIntConstant(m, "PARTITION_DIAG", PED_PARTITION_DIAG);
 
     PyModule_AddIntConstant(m, "DISK_CYLINDER_ALIGNMENT", PED_DISK_CYLINDER_ALIGNMENT);
 
@@ -544,6 +552,10 @@ PyMODINIT_FUNC init_ped(void) {
     PartedException = PyErr_NewException("_ped.PartedException", NULL, NULL);
     Py_INCREF(PartedException);
     PyModule_AddObject(m, "PartedException", PartedException);
+
+    PartedAskException = PyErr_NewException("_ped.PartedAskException", NULL, NULL);
+    Py_INCREF(PartedAskException);
+    PyModule_AddObject(m, "PartedAskException", PartedAskException);
 
     PartitionException = PyErr_NewException("_ped.PartitionException", NULL,
                                              NULL);

@@ -1,3 +1,47 @@
+commit f1d1612afb3c86b88db1935791613218908e0dc2
+Author: David Cantrell <dcantrell@redhat.com>
+Date:   Thu Apr 29 09:21:30 2010 -1000
+
+    New version.
+
+commit 4e30c69c74d719ab6d6c63eaf5dcc66501a580f1
+Author: David Cantrell <dcantrell@redhat.com>
+Date:   Thu Apr 29 08:48:10 2010 -1000
+
+    Handle PED_EXCEPTION_WARNING with PED_EXCEPTION_YES_NO (#575749)
+    
+    Catch PED_EXCEPTION_YES_NO and filter it up to the caller.  GPT disk
+    label detection currently uses this exception.
+
+commit 568a2925a13852fd4f37c232820a3ad1b2eda152
+Author: Chris Lumens <clumens@redhat.com>
+Date:   Wed Apr 21 11:54:31 2010 -0400
+
+    New version.
+    
+    Also, bump the required libparted version since we need it for the new parted
+    flag.
+
+commit e3d63b886f430a90e58a92e70c6f11ba92c695e5
+Author: Chris Lumens <clumens@redhat.com>
+Date:   Wed Apr 21 11:46:10 2010 -0400
+
+    Add support for the PARTITION_DIAG parted flag (#583628).
+
+commit 24e0b294cf27d879008520bc0e8ec58545179402
+Author: Chris Lumens <clumens@redhat.com>
+Date:   Thu Mar 25 14:55:25 2010 -0400
+
+    New version.
+
+commit 2425a8135b34d07afd666a6b0844f70c501e00bd
+Author: Ales Kozumplik <akozumpl@redhat.com>
+Date:   Thu Mar 25 11:26:25 2010 +0100
+
+    Restore locales even when an exception is thrown (#571940).
+    
+    Otherwise this disables translations of all glade strings in anaconda.
+
 commit 35108d4fea8b6c906f221cc7524e90dfeafbfedb
 Author: David Cantrell <dcantrell@redhat.com>
 Date:   Mon Mar 1 12:29:47 2010 -1000
