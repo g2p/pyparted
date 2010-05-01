@@ -1,4 +1,4 @@
-pyparted (3.4-1) UNRELEASED; urgency=low
+pyparted (3.4-1) unstable; urgency=low
 
   * New upstream release.
   * Switch to format 3.0 (quilt).
@@ -11,7 +11,7 @@ pyparted (3.4-1) UNRELEASED; urgency=low
     - Run "autoreconf -fi -I m4" for every Python build instance to get
       proper autoconf/libtool fixes.
 
- -- Luca Falavigna <dktrkranz@debian.org>  Sat, 01 May 2010 12:16:04 +0200
+ -- Luca Falavigna <dktrkranz@debian.org>  Sat, 01 May 2010 12:17:44 +0200
 
 pyparted (3.1-2) unstable; urgency=low
 
