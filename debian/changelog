@@ -2,6 +2,8 @@ pyparted (3.4-1) UNRELEASED; urgency=low
 
   * New upstream release.
   * Switch to format 3.0 (quilt).
+  * debian/patches/no_PED_PARTITION_DIAG.patch:
+    - Disable support for PARTITION_DIAG, not yet implemented upstream.
   * debian/control:
     - Add autoconf, automake and libtool to Build-Depends.
     - Add autoconf2.13 and automake1.4 to Build-Conflicts.
@@ -9,7 +11,7 @@ pyparted (3.4-1) UNRELEASED; urgency=low
     - Run "autoreconf -fi -I m4" for every Python build instance to get
       proper autoconf/libtool fixes.
 
- -- Luca Falavigna <dktrkranz@debian.org>  Sat, 01 May 2010 11:52:57 +0200
+ -- Luca Falavigna <dktrkranz@debian.org>  Sat, 01 May 2010 12:16:04 +0200
 
 pyparted (3.1-2) unstable; urgency=low
 
