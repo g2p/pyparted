@@ -1,3 +1,10 @@
+pyparted (3.4-2) UNRELEASED; urgency=low
+
+  * debian/control:
+    - python2.6 is default, simplify dependencies accordingly.
+
+ -- Luca Falavigna <dktrkranz@debian.org>  Fri, 18 Jun 2010 17:12:00 +0200
+
 pyparted (3.4-1) unstable; urgency=low
 
   * New upstream release.
