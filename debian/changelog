@@ -1,4 +1,4 @@
-pyparted (3.4-2) UNRELEASED; urgency=low
+pyparted (3.4-2) unstable; urgency=low
 
   * debian/patches/no_PED_PARTITION_DIAG.patch:
     - Removed, PED_PARTITION_DIAG is available in parted 2.3.
@@ -7,7 +7,7 @@ pyparted (3.4-2) UNRELEASED; urgency=low
     - Build-depend on libparted0-dev (>= 2.3).
     - Bump Standards-Version to 3.9.0, no changes required.
 
- -- Luca Falavigna <dktrkranz@debian.org>  Tue, 29 Jun 2010 19:51:02 +0200
+ -- Luca Falavigna <dktrkranz@debian.org>  Tue, 29 Jun 2010 19:51:30 +0200
 
 pyparted (3.4-1) unstable; urgency=low
 
