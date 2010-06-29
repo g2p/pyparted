@@ -1,10 +1,12 @@
 pyparted (3.4-2) UNRELEASED; urgency=low
 
+  * debian/patches/no_PED_PARTITION_DIAG.patch:
+    - Removed, PED_PARTITION_DIAG is available in parted 2.3.
   * debian/control:
     - python2.6 is default, simplify dependencies accordingly.
     - Build-depend on libparted0-dev (>= 2.3).
 
- -- Luca Falavigna <dktrkranz@debian.org>  Tue, 29 Jun 2010 19:44:53 +0200
+ -- Luca Falavigna <dktrkranz@debian.org>  Tue, 29 Jun 2010 19:46:35 +0200
 
 pyparted (3.4-1) unstable; urgency=low
 
