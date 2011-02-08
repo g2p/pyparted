@@ -30,6 +30,7 @@ from _ped import CreateException
 from _ped import ConstraintException
 from _ped import DeviceException
 from _ped import DiskException
+from _ped import DiskLabelException
 from _ped import FileSystemException
 from _ped import GeometryException
 from _ped import IOException
@@ -39,7 +40,6 @@ from _ped import PartitionException
 from _ped import TimerException
 from _ped import UnknownDeviceException
 from _ped import UnknownTypeException
-from _ped import PartedAskException
 
 from alignment import Alignment
 from constraint import Constraint
