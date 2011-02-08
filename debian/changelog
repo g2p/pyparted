@@ -1,8 +1,10 @@
 pyparted (3.5-1) UNRELEASED; urgency=low
 
   * New upstream release.
+  * debian/copyright:
+    - Update copyright years.
 
- -- Luca Falavigna <dktrkranz@debian.org>  Tue, 08 Feb 2011 23:26:23 +0100
+ -- Luca Falavigna <dktrkranz@debian.org>  Tue, 08 Feb 2011 23:27:52 +0100
 
 pyparted (3.4-2) unstable; urgency=low
 
