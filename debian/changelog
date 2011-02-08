@@ -1,3 +1,9 @@
+pyparted (3.5-1) UNRELEASED; urgency=low
+
+  * New upstream release.
+
+ -- Luca Falavigna <dktrkranz@debian.org>  Tue, 08 Feb 2011 23:26:23 +0100
+
 pyparted (3.4-2) unstable; urgency=low
 
   * debian/patches/no_PED_PARTITION_DIAG.patch:
