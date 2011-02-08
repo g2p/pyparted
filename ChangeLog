@@ -1,3 +1,70 @@
+commit 18c5e11aff077d3cbc51cc74e7eb5addd8a2965f
+Author: David Cantrell <dcantrell@redhat.com>
+Date:   Mon Jan 17 11:01:24 2011 -1000
+
+    New version.
+
+commit 63edbaaf86a3229d6dc625b016d05b10ff743a4e
+Author: David Cantrell <david.l.cantrell@gmail.com>
+Date:   Mon Jan 17 09:56:30 2011 -1000
+
+    Revert "Allow getting the actual list from the cache."
+    
+    This reverts commit 696d14b1109787ca23de067cc0c1fbae9f81f968.  We
+    don't want to allow peeking in to the internal structures of
+    CachedList.
+
+commit 953d56308b2790ccc3c02dec9d35279b5c5236a9
+Author: David Cantrell <dcantrell@redhat.com>
+Date:   Sun Jan 16 01:39:12 2011 -1000
+
+    Bad commit in git repo seems to be gone.
+
+commit 0360d3020ae77431807acc4ba78342a9af7f74da
+Author: David Cantrell <dcantrell@redhat.com>
+Date:   Sun Jan 16 00:40:49 2011 -1000
+
+    Drop dependency on python-decorator module.
+    
+    Drop the dependency on the python-decorator module.  Still retain the
+    internal @localeC functionality, but without using the decorator module.
+    Patch from Toshio Kuratomi.
+    
+    Resolves https://fedorahosted.org/pyparted/ticket/28
+
+commit 696d14b1109787ca23de067cc0c1fbae9f81f968
+Author: Joel Granados Moreno <jgranado@redhat.com>
+Date:   Thu Aug 13 13:45:00 2009 +0200
+
+    Allow getting the actual list from the cache.
+
+commit 983d118f09bc3b5f974c3c2695ddd8ae8a718261
+Author: Joel Granados Moreno <jgranado@redhat.com>
+Date:   Thu Aug 13 13:45:00 2009 +0200
+
+    Differentiate the "Could not commit" messages.
+    
+    Very usefull when trying to debug down to libparted.
+
+commit c975e64fc73711194192815be80d5e88f6173b17
+Author: Colin Watson <cjwatson@ubuntu.com>
+Date:   Tue Jun 22 09:29:22 2010 +0100
+
+    Import _ped.DiskLabelException into parted namespace
+
+commit a28d68388c6e346938b8f8497258242b30aa9f36
+Author: David Cantrell <dcantrell@redhat.com>
+Date:   Wed Jul 7 08:23:08 2010 -1000
+
+    Return PED_EXCEPTION_NO for yes/no interactive exceptions.
+    
+    If we get a PED_EXCEPTION_YES_NO exception, we return PED_EXCEPTION_NO
+    to libparted to avoid any potential data loss ('yes' is assuming the
+    yes/no question would use the affirmative response to proceed with
+    destructive operations, which may always be the case...it is for now).
+    In pyparted, we then pass up an appropriate exception to the caller so
+    the user can be prompted and action taken.
+
 commit f1d1612afb3c86b88db1935791613218908e0dc2
 Author: David Cantrell <dcantrell@redhat.com>
 Date:   Thu Apr 29 09:21:30 2010 -1000
