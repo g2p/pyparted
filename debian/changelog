@@ -1,4 +1,4 @@
-pyparted (3.5-1) UNRELEASED; urgency=low
+pyparted (3.5-1) unstable; urgency=low
 
   * New upstream release.
   * Switch to dh_python2.
@@ -8,7 +8,7 @@ pyparted (3.5-1) UNRELEASED; urgency=low
   * debian/copyright:
     - Update copyright years.
 
- -- Luca Falavigna <dktrkranz@debian.org>  Tue, 08 Feb 2011 23:40:02 +0100
+ -- Luca Falavigna <dktrkranz@debian.org>  Wed, 09 Feb 2011 00:00:17 +0100
 
 pyparted (3.4-2) unstable; urgency=low
 
