@@ -3,7 +3,7 @@
 PYTHONS := $(shell pyversions -vr debian/control)
 
 %:
-	dh $@
+	dh $@ --with python2
 
 clean:
 	rm -fr build
@@ -33,4 +33,3 @@ override_dh_auto_install:
 
 override_dh_strip:
 	dh_strip --dbg-package=python-parted-dbg -X_pedmodule_d.so
-	cd debian/python-parted-dbg/usr/lib/debug/usr/lib && mv pyshared pymodules
