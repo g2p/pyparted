@@ -1,8 +1,11 @@
 pyparted (3.6-1) UNRELEASED; urgency=low
 
   * New upstream release.
+  * debian/control:
+    - New release is not compatible with python versions prior to 2.7, so
+      bump X-Python-Version field to >= 2.7.
 
- -- Luca Falavigna <dktrkranz@debian.org>  Sun, 27 Mar 2011 11:57:13 +0200
+ -- Luca Falavigna <dktrkranz@debian.org>  Sun, 27 Mar 2011 12:02:50 +0200
 
 pyparted (3.5-1) unstable; urgency=low
 

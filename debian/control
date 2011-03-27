@@ -6,7 +6,7 @@ Uploaders: Luca Falavigna <dktrkranz@debian.org>
 Build-Depends: debhelper (>= 7.0.50~), python-all-dev (>= 2.6.6-3~), python-all-dbg (>= 2.6.6-3~), pkg-config, libparted0-dev (>= 2.3), autoconf, automake, libtool
 Build-Conflicts: autoconf2.13, automake1.4
 Standards-Version: 3.9.1
-X-Python-Version: >= 2.6
+X-Python-Version: >= 2.7
 Homepage: http://fedorahosted.org/pyparted/
 Vcs-Git: git://git.debian.org/git/parted/debian/pyparted.git
 Vcs-Browser: http://git.debian.org/?p=parted/debian/pyparted.git
