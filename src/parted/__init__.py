@@ -22,6 +22,13 @@
 #                    Chris Lumens <clumens@redhat.com>
 #
 
+from __future__ import division
+
+import platform
+import re
+import sys
+import warnings
+
 __all__ = ['alignment', 'constraint', 'device', 'disk',
            'filesystem', 'geometry', 'partition']
 
@@ -107,6 +114,10 @@ from _ped import PARTITION_MSFT_RESERVED
 from _ped import PARTITION_APPLE_TV_RECOVERY
 from _ped import PARTITION_BIOS_GRUB
 from _ped import PARTITION_DIAG
+try:
+    from _ped import PARTITION_LEGACY_BOOT
+except ImportError:
+    pass
 
 from _ped import DISK_CYLINDER_ALIGNMENT
 
@@ -202,6 +213,62 @@ partitionTypesDict = {
 _exponent = {'b': 0, 'kb': 1, 'mb': 2, 'gb': 3, 'tb': 4,
              'pb': 5, 'eb': 6, 'zb': 7, 'yb': 8}
 
+# Refercences:
+#
+# 1. NIST Special Publication 330, 2008 Edition, Barry N. Taylor and Ambler
+#    Thompson, Editors
+#    The International System of Units (SI)
+#    Available from: http://physics.nist.gov/cuu/pdf/sp811.pdf
+#
+# 2. International standard IEC 60027-2, third edition,
+#    Letter symbols to be used in electrical technology --
+#    Part 2: Telecommunications and electronics.
+#
+# See the links below for quick online summaries:
+#
+# SI units:  http://physics.nist.gov/cuu/Units/prefixes.html
+# IEC units: http://physics.nist.gov/cuu/Units/binary.html
+__exponents = {
+    "B":    1,       # byte
+    "kB":   1000**1, # kilobyte
+    "MB":   1000**2, # megabyte
+    "GB":   1000**3, # gigabyte
+    "TB":   1000**4, # terabyte
+    "PB":   1000**5, # petabyte
+    "EB":   1000**6, # exabyte
+    "ZB":   1000**7, # zettabyte
+    "YB":   1000**8, # yottabyte
+
+    "KiB":  1024**1, # kibibyte
+    "MiB":  1024**2, # mebibyte
+    "GiB":  1024**3, # gibibyte
+    "TiB":  1024**4, # tebibyte
+    "PiB":  1024**5, # pebibyte
+    "EiB":  1024**6, # exbibyte
+    "ZiB":  1024**7, # zebibyte
+    "YiB":  1024**8  # yobibyte
+}
+
+def formatBytes(bytes_, unit):
+    """Convert bytes_ using an SI or IEC prefix. Note that unit is a
+       case sensitive string that must exactly match one of the IEC or SI
+       prefixes followed by 'B' (e.g. 'GB')."""
+
+    if unit not in __exponents.keys():
+        raise SyntaxError("{:} is not a valid SI or IEC byte unit".format(unit))
+    else:
+        return (bytes_ / __exponents[unit])
+
+def sizeToSectors(bytes_, unit, sector_size):
+    """Convert bytes_ of unit to a number of sectors. Note that unit is a
+       case sensitive string that must exactly match one of the IEC or SI
+       prefixes followed by 'B' (e.g. 'GB')."""
+
+    if unit not in __exponents.keys():
+        raise SyntaxError("{:} is not a valid SI or IEC byte unit".format(unit))
+    else:
+        return bytes_ * __exponents[unit] // sector_size
+
 # Valid disk labels per architecture type.  The list of label
 # names map to keys in the parted.diskType hash table.
 archLabels = {'i386': ['msdos', 'gpt'],
@@ -211,6 +278,57 @@ archLabels = {'i386': ['msdos', 'gpt'],
               'ia64': ['msdos', 'gpt'],
               'ppc': ['msdos', 'mac', 'amiga', 'gpt'],
               'x86_64': ['msdos', 'gpt']}
+
+# Adapted from:
+# http://stackoverflow.com/questions/922550/how-to-mark-a-global-as-deprecated-in-python
+#
+# Remember that DeprecationWarnings are ignored by default as they are not really
+# useful to users.  Developers can turn on DeprecationWarning notices by passing
+# the -Wd option to python or by setting PYTHONWARNINGS=d in the environment.
+def Deprecated(mod, deprecated={}):
+    """ Return a wrapped object that warns about deprecated accesses. """
+
+    class Wrapper(object):
+        warnmsg = "%s is deprecated and will be removed in a future release."
+
+        def __getattr__(self, attr):
+            if attr in deprecated.keys():
+                msg = self.warnmsg + " " + deprecated[attr]
+                warnings.warn(msg % attr, DeprecationWarning)
+
+            return getattr(mod, attr)
+
+        def __setattr__(self, attr, value):
+            if attr in deprecated.keys():
+                msg = self.warnmsg + " " + deprecated[attr]
+                warnings.warn(msg % attr, DeprecationWarning)
+            return setattr(mod, attr, value)
+
+    return Wrapper()
+
+# Valid disk labels and their applicable architectures.  The label names map
+# to keys in the parted.diskType hash table.
+__archLabels = (('amiga', 'ppc(64)?$'),
+                ('bsd', 'alpha$'),
+                ('dasd', 's390x?$'),
+                ('gpt', 'i[3-6]86$|x86_64$|ia64$|ppc(64)?$'),
+                ('mac', 'ppc(64)?$'),
+                ('msdos', 'i[3-6]86$|x86_64$|s390x?$|alpha$|ia64$|ppc(64)?$'),
+                ('sun', 'sparc(64)?$'))
+
+def getLabels(arch=None):
+    """Return a set containing the disk labels compatible with the
+       architecture of the computer calling this function. If an architecture
+       is passed, return the labels compatible with that architecture."""
+    labels = set()
+    if arch is None:
+        arch = platform.machine()
+
+    for label, regex in __archLabels:
+        if re.match(regex, arch):
+            labels.add(label)
+
+    return labels
 
 class ReadOnlyProperty(Exception):
     """Exception raised when a write operation occurs on a read-only property."""
@@ -305,3 +423,12 @@ def version():
     ver['libparted'] = libparted_version()
     ver['pyparted'] = pyparted_version()
     return ver
+
+# Mark deprecated items
+_deprecated = {"partitionTypesDict": "DOS disk label types are not provided "
+                                     "by libparted, so the codes are not "
+                                     "useful.",
+               "_exponent":          "Use __exponents instead.",
+               "archLabels":         "Use getLabels() instead.",
+              }
+sys.modules[__name__] = Deprecated(sys.modules[__name__], _deprecated)

@@ -1,4 +1,3 @@
-#!/usr/bin/python
 #
 # Copyright (C) 2008, 2009  Red Hat, Inc.
 #
@@ -121,7 +120,7 @@ class RequiresDeviceAlignment(RequiresDevice):
 class RequiresLabeledDevice(RequiresDevice):
     def setUp(self):
         RequiresDevice.setUp(self)
-        os.system("/sbin/parted -s %s mklabel msdos" % (self.path,))
+        os.system("parted -s %s mklabel msdos" % (self.path,))
 
 # Base class for any test case that requires a _ped.Disk.
 class RequiresDisk(RequiresDevice):

@@ -1,4 +1,3 @@
-#!/usr/bin/python
 #
 # Copyright (C) 2008, 2009  Red Hat, Inc.
 #
@@ -64,4 +63,5 @@ def suite():
     return suite
 
 s = suite()
-unittest.TextTestRunner(verbosity=2).run(s)
+if __name__ == "__main__":
+    unittest.main(defaultTest='s', verbosity=2)

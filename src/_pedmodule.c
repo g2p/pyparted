@@ -288,23 +288,42 @@ PyObject *py_pyparted_version(PyObject *s, PyObject *args) {
     int t = 0;
     int major = -1, minor = -1, update = -1;
     char suffix[11];
+    char *v = VERSION;
 
-    if (index(VERSION, '-')) {
+    /* Read pyparted version string.  Support the following formats:
+     *     X
+     *     X.Y
+     *     X.Y.Z
+     *     X.Y.Z-string
+     */
+    if (index(v, '-')) {
         memset(&suffix, '\0', sizeof(suffix));
-        t = sscanf(VERSION, "%d.%d.%d-%10s", &major, &minor, &update,
+        t = sscanf(v, "%d.%d.%d-%10s", &major, &minor, &update,
                    (char *) &suffix);
-        if ((t != 4) || (t == EOF)) {
-            return NULL;
-        }
-
-        return Py_BuildValue("(iiis)", major, minor, update, suffix);
     } else {
-        t = sscanf(VERSION, "%d.%d.%d", &major, &minor, &update);
-        if ((t != 3) || (t == EOF)) {
-            return NULL;
-        }
+        t = sscanf(v, "%d.%d.%d", &major, &minor, &update);
+    }
 
-        return Py_BuildValue("(iii)", major, minor, update);
+    if (t == 0 || t == EOF) {
+        return NULL;
+    }
+
+    if (t == 1) {
+        return Py_BuildValue("(i)", major);
+    } else if (t == 2) {
+        if (minor == -1) {
+            return Py_BuildValue("(is)", major, suffix);
+        } else {
+            return Py_BuildValue("(ii)", major, minor);
+        }
+    } else if (t == 3) {
+        if (update == -1) {
+            return Py_BuildValue("(iis)", major, minor, suffix);
+        } else {
+            return Py_BuildValue("(iii)", major, minor, update);
+        }
+    } else {
+        return Py_BuildValue("(iiis)", major, minor, update, suffix);
     }
 }
 
@@ -492,6 +511,9 @@ PyMODINIT_FUNC init_ped(void) {
     PyModule_AddIntConstant(m, "PARTITION_APPLE_TV_RECOVERY", PED_PARTITION_APPLE_TV_RECOVERY);
     PyModule_AddIntConstant(m, "PARTITION_BIOS_GRUB", PED_PARTITION_BIOS_GRUB);
     PyModule_AddIntConstant(m, "PARTITION_DIAG", PED_PARTITION_DIAG);
+#ifdef HAVE_PED_PARTITION_LEGACY_BOOT
+    PyModule_AddIntConstant(m, "PARTITION_LEGACY_BOOT", PED_PARTITION_LEGACY_BOOT);
+#endif
 
     PyModule_AddIntConstant(m, "DISK_CYLINDER_ALIGNMENT", PED_DISK_CYLINDER_ALIGNMENT);
 

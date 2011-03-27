@@ -1,4 +1,3 @@
-#!/usr/bin/python
 #
 # Test cases for the methods in the parted.geometry module itself
 #
@@ -24,79 +23,104 @@
 import parted
 import unittest
 
+from baseclass import *
+
 # One class per method, multiple tests per class.  For these simple methods,
 # that seems like good organization.  More complicated methods may require
 # multiple classes and their own test suite.
+@unittest.skip("Unimplemented test case.")
 class GeometryNewTestCase(unittest.TestCase):
     def runTest(self):
         # TODO
         self.fail("Unimplemented test case.")
 
+@unittest.skip("Unimplemented test case.")
 class GeometryGetSetTestCase(unittest.TestCase):
     def runTest(self):
         # TODO
         self.fail("Unimplemented test case.")
 
+@unittest.skip("Unimplemented test case.")
 class GeometryCheckTestCase(unittest.TestCase):
     def runTest(self):
         # TODO
         self.fail("Unimplemented test case.")
 
+@unittest.skip("Unimplemented test case.")
 class GeometryContainsTestCase(unittest.TestCase):
     def runTest(self):
         # TODO
         self.fail("Unimplemented test case.")
 
+@unittest.skip("Unimplemented test case.")
 class GeometryContainsSectorTestCase(unittest.TestCase):
     def runTest(self):
         # TODO
         self.fail("Unimplemented test case.")
 
+@unittest.skip("Unimplemented test case.")
 class GeometryEqualTestCase(unittest.TestCase):
     def runTest(self):
         # TODO
         self.fail("Unimplemented test case.")
 
+@unittest.skip("Unimplemented test case.")
 class GeometryGetSizeTestCase(unittest.TestCase):
     def runTest(self):
         # TODO
         self.fail("Unimplemented test case.")
 
+class GeometryGetLengthTestCase(RequiresDevice):
+    def runTest(self):
+        length = 137
+        geom = parted.Geometry(self._device, start=100, length=length)
+
+        self.assertEqual(geom.getLength(), geom.length)
+        self.assertEqual(geom.getLength(), length)
+
+@unittest.skip("Unimplemented test case.")
 class GeometryIntersectTestCase(unittest.TestCase):
     def runTest(self):
         # TODO
         self.fail("Unimplemented test case.")
 
+@unittest.skip("Unimplemented test case.")
 class GeometryMapTestCase(unittest.TestCase):
     def runTest(self):
         # TODO
         self.fail("Unimplemented test case.")
 
+@unittest.skip("Unimplemented test case.")
 class GeometryOverlapsWithTestCase(unittest.TestCase):
     def runTest(self):
         # TODO
         self.fail("Unimplemented test case.")
 
+@unittest.skip("Unimplemented test case.")
 class GeometryReadTestCase(unittest.TestCase):
     def runTest(self):
         # TODO
         self.fail("Unimplemented test case.")
 
+@unittest.skip("Unimplemented test case.")
 class GeometrySyncTestCase(unittest.TestCase):
     def runTest(self):
         # TODO
         self.fail("Unimplemented test case.")
 
+@unittest.skip("Unimplemented test case.")
 class GeometryWriteTestCase(unittest.TestCase):
     def runTest(self):
         # TODO
         self.fail("Unimplemented test case.")
 
+@unittest.skip("Unimplemented test case.")
 class GeometryGetPedGeometryTestCase(unittest.TestCase):
     def runTest(self):
         # TODO
         self.fail("Unimplemented test case.")
 
+@unittest.skip("Unimplemented test case.")
 class GeometryStrTestCase(unittest.TestCase):
     def runTest(self):
         # TODO
@@ -112,6 +136,7 @@ def suite():
     suite.addTest(GeometryContainsSectorTestCase())
     suite.addTest(GeometryEqualTestCase())
     suite.addTest(GeometryGetSizeTestCase())
+    suite.addTest(GeometryGetLengthTestCase())
     suite.addTest(GeometryIntersectTestCase())
     suite.addTest(GeometryMapTestCase())
     suite.addTest(GeometryOverlapsWithTestCase())
@@ -123,4 +148,5 @@ def suite():
     return suite
 
 s = suite()
-unittest.TextTestRunner(verbosity=2).run(s)
+if __name__ == "__main__":
+    unittest.main(defaultTest='s', verbosity=2)

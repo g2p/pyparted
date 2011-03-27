@@ -1,4 +1,3 @@
-#!/usr/bin/python
 #
 # Test cases for the methods in the parted module itself
 #
@@ -21,6 +20,8 @@
 # Red Hat Author(s): David Cantrell <dcantrell@redhat.com>
 #
 
+from __future__ import division
+
 import _ped
 import parted
 import unittest
@@ -29,6 +30,36 @@ from baseclass import *
 # One class per method, multiple tests per class.  For these simple methods,
 # that seems like good organization.  More complicated methods may require
 # multiple classes and their own test suite.
+class FormatBytesTestCase(unittest.TestCase):
+    def runTest(self):
+        self.assertRaises(SyntaxError, parted.formatBytes, 57, "GIB")
+        self.assertEqual(1e-24, parted.formatBytes(1, "YB"))
+        self.assertEqual(1/2**80, parted.formatBytes(1, "YiB"))
+        self.assertEqual(1, parted.formatBytes(1, 'B'))
+        self.assertEqual(1, parted.formatBytes(1e24, 'YB'))
+        self.assertEqual(1, parted.formatBytes(2**80, 'YiB'))
+
+class BytesToSectorsTestCase(unittest.TestCase):
+    def runTest(self):
+        self.assertRaises(SyntaxError, parted.sizeToSectors, 9, "yb", 1)
+        self.assertEqual(int(parted.sizeToSectors(7777.0, "B", 512)),
+                             parted.sizeToSectors(7777.0, "B", 512))
+
+class GetLabelsTestCase(unittest.TestCase):
+    def runTest(self):
+        self.assertGreater(len(parted.getLabels()), 0)
+        self.assertSetEqual(parted.getLabels('ppcc'), set())
+        self.assertSetEqual(parted.getLabels('sparc6'), set())
+        self.assertSetEqual(parted.getLabels('i586'), {'gpt', 'msdos'})
+        self.assertSetEqual(parted.getLabels('s390'), {'dasd', 'msdos'})
+        self.assertSetEqual(parted.getLabels('s390x'), {'dasd', 'msdos'})
+        self.assertSetEqual(parted.getLabels('sparc'), {'sun'})
+        self.assertSetEqual(parted.getLabels('sparc64'), {'sun'})
+        self.assertSetEqual(parted.getLabels('ppc'), {'amiga', 'gpt', 'mac', 'msdos'})
+        self.assertSetEqual(parted.getLabels('ppc64'), {'amiga', 'gpt', 'mac', 'msdos'})
+        self.assertSetEqual(parted.getLabels('alpha'), {'bsd', 'msdos'})
+        self.assertSetEqual(parted.getLabels('ia64'), {'gpt', 'msdos'})
+
 class GetDeviceTestCase(RequiresDeviceNode):
     def runTest(self):
         # Check that a DiskException is raised for an invalid path
@@ -53,11 +84,13 @@ class GetAllDevicesTestCase(unittest.TestCase):
         # And make sure each element of the list is a parted.Device
         map(lambda s: self.assert_(isinstance(s, parted.Device)), self.devices)
 
+@unittest.skip("Unimplemented test case.")
 class ProbeForSpecificFileSystemTestCase(unittest.TestCase):
     def runTest(self):
         # TODO
         self.fail("Unimplemented test case.")
 
+@unittest.skip("Unimplemented test case.")
 class ProbeFileSystemTestCase(unittest.TestCase):
     def runTest(self):
         # TODO
@@ -70,22 +103,30 @@ class FreshDiskTestCase(RequiresDevice):
         self.assertRaises(KeyError, parted.freshDisk, self._device, 'crackers')
 
         # Create a new disk for each disk type key, verify each one
+        # XXX: Skip over dvh for now (SGI disk label), which doesn't seem to have
+        # working libparted support.  If anyone with an SGI cares, patches welcome.
         for key in parted.diskType.keys():
+            if key == 'dvh':
+                continue
             disk = parted.freshDisk(self._device, key)
             self.assert_(isinstance(disk, parted.Disk))
             self.assertTrue(disk.type == key)
 
         # Create a new disk each disk type value, verify each one
         for value in parted.diskType.values():
+            if value.name == 'dvh':
+                continue
             disk = parted.freshDisk(self._device, value)
             self.assert_(isinstance(disk, parted.Disk))
             self.assertTrue(parted.diskType[disk.type] == value)
 
+@unittest.skip("Unimplemented test case.")
 class IsAlignToCylindersTestCase(unittest.TestCase):
     def runTest(self):
         # TODO
         self.fail("Unimplemented test case.")
 
+@unittest.skip("Unimplemented test case.")
 class ToggleAlignToCylindersTestCase(unittest.TestCase):
     def runTest(self):
         # TODO
@@ -94,12 +135,15 @@ class ToggleAlignToCylindersTestCase(unittest.TestCase):
 class VersionTestCase(unittest.TestCase):
     def runTest(self):
         ver = parted.version()
-        self.assertTrue(ver['libparted'] == _ped.libparted_version())
-        self.assertTrue(ver['pyparted'] == _ped.pyparted_version())
+        self.assertEquals(ver['libparted'], _ped.libparted_version())
+        self.assertEquals(ver['pyparted'], _ped.pyparted_version())
 
 # And then a suite to hold all the test cases for this module.
 def suite():
     suite = unittest.TestSuite()
+    suite.addTest(FormatBytesTestCase())
+    suite.addTest(BytesToSectorsTestCase())
+    suite.addTest(GetLabelsTestCase())
     suite.addTest(GetDeviceTestCase())
     suite.addTest(GetAllDevicesTestCase())
     suite.addTest(ProbeForSpecificFileSystemTestCase())
@@ -111,4 +155,5 @@ def suite():
     return suite
 
 s = suite()
-unittest.TextTestRunner(verbosity=2).run(s)
+if __name__ == "__main__":
+    unittest.main(defaultTest='s', verbosity=2)

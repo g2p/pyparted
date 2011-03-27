@@ -1,3 +1,248 @@
+commit a687c9671981c5f06e1a679f5ecf1407bbf21ad6
+Author: David Cantrell <dcantrell@redhat.com>
+Date:   Tue Mar 22 21:55:30 2011 -1000
+
+    New version.
+
+commit 99d144c414a62d017f4cce076aaadb86e278650d
+Author: David Cantrell <dcantrell@redhat.com>
+Date:   Tue Mar 22 21:52:58 2011 -1000
+
+    Fix ConstraintNewTestCase in tests/parted
+
+commit 6f3f39262cbc1b6d20581c835e2cdfe661975bfb
+Author: David Cantrell <dcantrell@redhat.com>
+Date:   Tue Mar 22 17:21:27 2011 -1000
+
+    Fix FreshDiskTestCase and VersionTestCase in tests/parted.
+
+commit 76187f55e49796506c01919813cc42e19082f09b
+Author: David Cantrell <dcantrell@redhat.com>
+Date:   Tue Mar 22 17:20:28 2011 -1000
+
+    Fix pyparted_version() function.
+    
+    Handle version numbers in multiple formats:  X, X.Y, and X.Y.Z.  Also,
+    any of those formats with -string on the end.
+
+commit c75465f29d4ff2cd2e8a95576d9d23b2e77bf948
+Author: David Cantrell <dcantrell@redhat.com>
+Date:   Tue Mar 22 16:31:55 2011 -1000
+
+    Fix failing test cases in tests/_ped
+    
+    These were failing due to leftovers from incomplete functionality in
+    either pyparted or libparted, but more things are working these days.
+    Most notably, we now have working test cases for:
+        DeviceGetMinimumAlignmentTestCase
+        DeviceGetOptimumAlignmentTestCase
+        PartitionGetNameTestCase
+    
+    Most of these changes are due to improvements in libparted.
+
+commit 8a8433094ea5adcd0f6214db1eceb43a849773bd
+Author: David Campbell <davekong@archlinux.us>
+Date:   Fri Mar 18 13:53:09 2011 -0400
+
+    Added __archLabels and getLabels().
+    
+    __archLabels is a tuple of pairs (disk label, regex) where regex specifies
+    what architectures the given label supports, and getLabels is a function for
+    returning a set containing the disk labels for some architecture. These
+    additions are intended to replace the now deprecated archLabels dict.
+    
+    Signed-off-by: David Cantrell <dcantrell@redhat.com>
+
+commit 60f08d6899deb5217f59fa193e5948f27bde0ffc
+Author: David Cantrell <dcantrell@redhat.com>
+Date:   Thu Mar 17 17:07:05 2011 -1000
+
+    Mark _exponent as deprecated, clean up Deprecated()
+    
+    Use a dict to define the deprecated globals and supplemental warning
+    message text.
+
+commit 1c1ada9441ca54e0f6b80948c2cb8f63adfaf4b9
+Author: David Cantrell <dcantrell@redhat.com>
+Date:   Thu Mar 17 16:53:43 2011 -1000
+
+    Mark partitionTypesDict as deprecated.
+    
+    Add code to mark globals with DeprecationWarning.  Mark
+    partitionTypesDict as deprecated.
+
+commit cbd1460e49fe085dff2711e3255b851daca3eaa1
+Author: David Campbell <davekong@archlinux.us>
+Date:   Tue Mar 8 14:50:04 2011 -0500
+
+    Added sizeToSectors function.
+    
+    Originally named bytesToSectors, but renamed to sizeToSectors
+    (dcantrell).
+    
+    Signed-off-by: David Cantrell <dcantrell@redhat.com>
+
+commit 1dea9e3d8617738c83166df1524968712d95cdbd
+Author: David Campbell <davekong@archlinux.us>
+Date:   Thu Mar 17 14:12:38 2011 -0400
+
+    Use assertGreater and assertGreaterEqual
+    
+    There were some places where assertTrue was being used but assertGreater or
+    assertGreaterEqual could have been used instead. Use the latter since it gives
+    better output when there the assert fails.
+    
+    Signed-off-by: David Cantrell <dcantrell@redhat.com>
+
+commit 0a3c14bd23643312286e461a1160230ff75f44a8
+Author: David Cantrell <dcantrell@redhat.com>
+Date:   Thu Mar 17 16:31:11 2011 -1000
+
+    Formatting improvements.
+
+commit bf5bd64438a5ffbc6083853c96ff5078450b5eaa
+Author: David Cantrell <dcantrell@redhat.com>
+Date:   Thu Mar 17 16:28:32 2011 -1000
+
+    Add support for PED_PARTITION_LEGACY_BOOT flag.
+    
+    This is currently in the master branch for upstream parted and is part
+    of the parted package in Fedora rawhide.  The latest stable release of
+    parted is 2.3.  Since we cannot depend on the library version to know if
+    PED_PARTITION_LEGACY_BOOT is defined, add in a special check for that
+    constant and enable it in _ped and parted if it's present.
+
+commit aed73f598c02afeba923f34da76fd6af8dedeab3
+Author: David Cantrell <dcantrell@redhat.com>
+Date:   Wed Mar 16 17:11:16 2011 -1000
+
+    Use the mailing list as the owner email address.
+    
+    Report bugs to the list or in Trac at
+        http://fedorahosted.org/pyparted
+    not me directly.
+
+commit aa722da61a6216620fe1bba6f319fe3738b20992
+Author: David Cantrell <dcantrell@redhat.com>
+Date:   Wed Mar 16 16:58:44 2011 -1000
+
+    parted may not be installed as /sbin/parted, rely on $PATH
+    
+    Fedora-based systems install parted as /sbin/parted, but not every
+    distribution does that.  Rely on $PATH and let the shell find it.
+
+commit 5ef68057e3827c30ffdbfd59d430551c3fb581df
+Author: David Campbell <davekong@archlinux.us>
+Date:   Sat Mar 12 21:13:59 2011 -0500
+
+    Use unittest.main() to run tests as scripts.
+    
+    This makes sure that the tests return the correct values on exiting.
+    
+    Signed-off-by: David Cantrell <dcantrell@redhat.com>
+
+commit 458883b7063a7b9b7ef085167c44b5aaef818cf1
+Author: David Campbell <davekong@archlinux.us>
+Date:   Fri Mar 11 16:29:13 2011 -0500
+
+    Added getLength method.
+    
+    The classes Device, Partition, and Geometry now have a getLength method that
+    is to replace the getSize method. It uses the new formatBytes function,
+    allowing for a wider (and more correct) range of byte prefixes. It defaults to
+    returning the length in sectors, so that it mirrors the length property. Also,
+    sectors can be passed as an argument to allow easier dynamic unit selection in
+    user programs.
+    
+    Signed-off-by: David Cantrell <dcantrell@redhat.com>
+
+commit f3007caf42ffd3da77d73e36b5ac8a2244d343a0
+Author: David Campbell <davekong@archlinux.us>
+Date:   Mon Mar 7 14:08:39 2011 -0500
+
+    Added formatBytes function and __exponents dict.
+    
+    The old _exponents dictionary is incorrect and specifying the base seperate
+    from the power seems prone to errors.
+    
+    Signed-off-by: David Cantrell <dcantrell@redhat.com>
+
+commit 166e61a86c567a1da1b7a6ec25561a6ddbf06a82
+Author: David Campbell <davekong@archlinux.us>
+Date:   Fri Mar 11 18:06:39 2011 -0500
+
+    Fix script wrapper for _ped/test_ped.py
+    
+    I got the script working to import all the tests and run them as one suite, and
+    noticed that there was a '=' where it should be '==' in test_ped.py.
+
+commit 167d7c9295cdcc9afe8cdc4ed9a5785fa3597612
+Author: David Cantrell <dcantrell@redhat.com>
+Date:   Thu Mar 10 10:54:37 2011 -1000
+
+    We have a new contributor:  David Campbell
+
+commit c76f82a008a0bfb91dd8295914843c92246b2ef5
+Author: David Cantrell <dcantrell@redhat.com>
+Date:   Thu Mar 10 10:47:11 2011 -1000
+
+    Enable colorized test output for things like PASS and FAIL.
+    
+    Found it in the automake documentation, looked neat.
+
+commit 57b8b61979ba06ffd6ef097ee9df17530d65c028
+Author: David Campbell <davekong@archlinux.us>
+Date:   Wed Mar 9 15:37:13 2011 -0500
+
+    Made all the test suites importable.
+    
+    Added 'if __name__ = "__main__":' wrappers to all the test case scripts so
+    that they can be imported as modules without running the suite.
+
+commit 6628aa6e31c1d0000f5870bc426a1c544fee456c
+Author: David Campbell <davekong@archlinux.us>
+Date:   Wed Mar 9 11:14:13 2011 -0500
+
+    Use the skip decorator to skip unimplemented tests.
+    
+    Test output is more readable now, and regressions and real failures are easier
+    to find.
+
+commit 5d2a4a88b297bd030e368ac7bb1d720bc5749124
+Author: David Cantrell <dcantrell@redhat.com>
+Date:   Thu Mar 10 10:47:40 2011 -1000
+
+    Remove #! from test files, add $(PYTHON) to TESTS_ENVIRONMENT.
+    
+    We had #!/usr/bin/python at the top of each test file that ran, which is
+    fine unless you are on a system with multiple versions of Python.
+    Removing the sha-bang line and add $(PYTHON) to the TESTS_ENVIRONMENT
+    variable in the Makefile.am files, which ensures our TESTS are run with
+    the Python picked up by the configure script.
+
+commit 86240b4be7d404c1ca7faccb6407ad6280ac518b
+Author: David Cantrell <dcantrell@redhat.com>
+Date:   Thu Mar 10 10:44:55 2011 -1000
+
+    Increase minimum required Python version to 2.7.
+
+commit 85b987d79735512dec5c961e46e02fee550f4a1b
+Author: David Cantrell <dcantrell@redhat.com>
+Date:   Tue Mar 8 13:09:09 2011 -1000
+
+    Updated the HACKING file.
+    
+    Reference PEP-8, clarify some statements.
+
+commit d64ca6451d8ea18408bb460b1280204be011b5a6
+Author: David Campbell <davekong@archlinux.us>
+Date:   Wed Mar 2 10:53:30 2011 -0500
+
+    Wrapped localeC to preserve attributes.
+    
+    The auto-generated documentation is much more readable now; although, the
+    function signature still does not appear correct.
+
 commit 18c5e11aff077d3cbc51cc74e7eb5addd8a2965f
 Author: David Cantrell <dcantrell@redhat.com>
 Date:   Mon Jan 17 11:01:24 2011 -1000
