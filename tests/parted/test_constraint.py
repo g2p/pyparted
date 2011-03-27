@@ -1,4 +1,3 @@
-#!/usr/bin/python
 #
 # Test cases for the methods in the parted.constraint module itself
 #
@@ -34,7 +33,7 @@ class ConstraintNewTestCase(RequiresDevice):
         align1 = parted.Alignment(offset=10, grainSize=5)
         align2 = parted.Alignment(offset=10, grainSize=5)
         geom1 = parted.Geometry(device=self._device, start=0, length=50)
-        geom2 = parted.Geometry(device=self._device, start=25, length=50)
+        geom2 = parted.Geometry(device=self._device, start=0, length=100)
 
         # Check that not passing enough args to parted.Constraint.__init__
         # is caught.
@@ -58,13 +57,17 @@ class ConstraintNewTestCase(RequiresDevice):
         c = parted.Constraint(device=self._device)
         self.assert_(isinstance(c, parted.Constraint))
 
-        c = parted.Constraint(startAlign=align1, endAlign=2,
+        c = parted.Constraint(startAlign=align1, endAlign=align2,
                               startRange=geom1, endRange=geom2,
                               minSize=10, maxSize=100)
         self.assert_(isinstance(c, parted.Constraint))
 
         # Use a _ped.Constraint as the initializer
-        pc = _ped.Constraint(align1, align2, geom1, geom2, 10, 100)
+        pc = _ped.Constraint(align1.getPedAlignment(),
+                             align2.getPedAlignment(),
+                             geom1.getPedGeometry(),
+                             geom2.getPedGeometry(),
+                             10, 100)
         c = parted.Constraint(PedConstraint=pc)
         self.assert_(isinstance(c, parted.Constraint))
         self.assertTrue(c.getPedConstraint() == pc)
@@ -117,31 +120,37 @@ class ConstraintGetSetTestCase(RequiresDevice):
         self.assertRaises(AttributeError, setattr, self.c, "startRange", 47)
         self.assertRaises(AttributeError, setattr, self.c, "endRange", 47)
 
+@unittest.skip("Unimplemented test case.")
 class ConstraintIntersectTestCase(unittest.TestCase):
     def runTest(self):
         # TODO
         self.fail("Unimplemented test case.")
 
+@unittest.skip("Unimplemented test case.")
 class ConstraintSolveMaxTestCase(unittest.TestCase):
     def runTest(self):
         # TODO
         self.fail("Unimplemented test case.")
 
+@unittest.skip("Unimplemented test case.")
 class ConstraintSolveNearestTestCase(unittest.TestCase):
     def runTest(self):
         # TODO
         self.fail("Unimplemented test case.")
 
+@unittest.skip("Unimplemented test case.")
 class ConstraintIsSolutionTestCase(unittest.TestCase):
     def runTest(self):
         # TODO
         self.fail("Unimplemented test case.")
 
+@unittest.skip("Unimplemented test case.")
 class ConstraintGetPedConstraintTestCase(unittest.TestCase):
     def runTest(self):
         # TODO
         self.fail("Unimplemented test case.")
 
+@unittest.skip("Unimplemented test case.")
 class ConstraintStrTestCase(unittest.TestCase):
     def runTest(self):
         # TODO
@@ -161,4 +170,5 @@ def suite():
     return suite
 
 s = suite()
-unittest.TextTestRunner(verbosity=2).run(s)
+if __name__ == "__main__":
+    unittest.main(defaultTest='s', verbosity=2)

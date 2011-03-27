@@ -1,4 +1,3 @@
-#!/usr/bin/python
 #
 # Test cases for the methods in the parted.alignment module itself
 #
@@ -77,21 +76,25 @@ class AlignmentGetSetTestCase(unittest.TestCase):
         # Check that looking for invalid attributes fails properly.
         self.assertRaises(AttributeError, getattr, self.a, "blah")
 
+@unittest.skip("Unimplemented test case.")
 class AlignmentIntersectTestCase(unittest.TestCase):
     def runTest(self):
         # TODO
         self.fail("Unimplemented test case.")
 
+@unittest.skip("Unimplemented test case.")
 class AlignmentAlignUpTestCase(unittest.TestCase):
     def runTest(self):
         # TODO
         self.fail("Unimplemented test case.")
 
+@unittest.skip("Unimplemented test case.")
 class AlignmentAlignDownTestCase(unittest.TestCase):
     def runTest(self):
         # TODO
         self.fail("Unimplemented test case.")
 
+@unittest.skip("Unimplemented test case.")
 class AlignmentAlignNearestTestCase(unittest.TestCase):
     def runTest(self):
         # TODO
@@ -133,6 +136,7 @@ class AlignmentGetPedAlignmentTestCase(unittest.TestCase):
         # Test for _ped.Alignment equality
         self.assertTrue(self.alignment.getPedAlignment() == self.pa)
 
+@unittest.skip("Unimplemented test case.")
 class AlignmentStrTestCase(unittest.TestCase):
     def runTest(self):
         # TODO
@@ -153,4 +157,5 @@ def suite():
     return suite
 
 s = suite()
-unittest.TextTestRunner(verbosity=2).run(s)
+if __name__ == "__main__":
+    unittest.main(defaultTest='s', verbosity=2)

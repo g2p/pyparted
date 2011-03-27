@@ -1,4 +1,3 @@
-#!/usr/bin/python
 #
 # Copyright (C) 2009  Red Hat, Inc.
 #
@@ -98,6 +97,7 @@ class DeviceCloseTestCase(RequiresDevice):
         self.assertEquals(self._device.open_count, 0)
         self.assertRaises(_ped.IOException, self._device.close)
 
+@unittest.skip("Unimplemented test case.")
 class DeviceDestroyTestCase(RequiresDevice):
     def runTest(self):
         # XXX: still broken, need to fix destroy function in pydevice.c
@@ -148,11 +148,13 @@ class DeviceEndExternalAccessTestCase(RequiresDevice):
         self.assertEquals(self._device.open_count, 1)
         self._device.close()
 
+@unittest.skip("Unimplemented test case.")
 class DeviceReadTestCase(unittest.TestCase):
     def runTest(self):
         # TODO
         self.fail("Unimplemented test case.")
 
+@unittest.skip("Unimplemented test case.")
 class DeviceWriteTestCase(unittest.TestCase):
     def runTest(self):
         # TODO
@@ -224,13 +226,19 @@ class DeviceGetMinimumAlignmentTestCase(RequiresDevice):
     def runTest(self):
         # XXX: This test case would be a lot more useful testing on real
         # hardware with unusual sector sizes.
-        self.assertRaises(_ped.CreateException, self._device.get_minimum_alignment)
+        alignment = self._device.get_minimum_alignment()
+        self.assertTrue(isinstance(alignment, _ped.Alignment))
+        self.assertEquals(alignment.grain_size, 1)
+        self.assertEquals(alignment.offset, 0)
 
 class DeviceGetOptimumAlignmentTestCase(RequiresDevice):
     def runTest(self):
         # XXX: This test case would be a lot more useful testing on real
         # hardware with unusual sector sizes.
-        self.assertRaises(_ped.CreateException, self._device.get_optimum_alignment)
+        alignment = self._device.get_optimum_alignment()
+        self.assertTrue(isinstance(alignment, _ped.Alignment))
+        self.assertEquals(alignment.grain_size, 2048)
+        self.assertEquals(alignment.offset, 0)
 
 class UnitFormatCustomByteTestCase(RequiresDevice):
     def setUp(self):
@@ -342,11 +350,13 @@ class UnitFormatTestCase(RequiresDevice):
     def tearDown(self):
         _ped.unit_set_default(self._initialDefault)
 
+@unittest.skip("Unimplemented test case.")
 class UnitParseTestCase(unittest.TestCase):
     # TODO
     def runTest(self):
         self.fail("Unimplemented test case.")
 
+@unittest.skip("Unimplemented test case.")
 class UnitParseCustomTestCase(unittest.TestCase):
     # TODO
     def runTest(self):
@@ -389,4 +399,5 @@ def suite():
     return suite
 
 s = suite()
-unittest.TextTestRunner(verbosity=2).run(s)
+if __name__ == "__main__":
+    unittest.main(defaultTest='s', verbosity=2)

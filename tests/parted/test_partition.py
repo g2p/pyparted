@@ -1,4 +1,3 @@
-#!/usr/bin/python
 #
 # Test cases for the methods in the parted.partition module itself
 #
@@ -24,74 +23,103 @@
 import parted
 import unittest
 
+from baseclass import *
+
 # One class per method, multiple tests per class.  For these simple methods,
 # that seems like good organization.  More complicated methods may require
 # multiple classes and their own test suite.
+@unittest.skip("Unimplemented test case.")
 class PartitionNewTestCase(unittest.TestCase):
     def runTest(self):
         # TODO
         self.fail("Unimplemented test case.")
 
+@unittest.skip("Unimplemented test case.")
 class PartitionGetSetTestCase(unittest.TestCase):
     def runTest(self):
         # TODO
         self.fail("Unimplemented test case.")
 
+@unittest.skip("Unimplemented test case.")
 class PartitionGetFlagTestCase(unittest.TestCase):
     def runTest(self):
         # TODO
         self.fail("Unimplemented test case.")
 
+@unittest.skip("Unimplemented test case.")
 class PartitionSetFlagTestCase(unittest.TestCase):
     def runTest(self):
         # TODO
         self.fail("Unimplemented test case.")
 
+@unittest.skip("Unimplemented test case.")
 class PartitionUnsetFlagTestCase(unittest.TestCase):
     def runTest(self):
         # TODO
         self.fail("Unimplemented test case.")
 
+@unittest.skip("Unimplemented test case.")
 class PartitionGetMaxGeometryTestCase(unittest.TestCase):
     def runTest(self):
         # TODO
         self.fail("Unimplemented test case.")
 
+@unittest.skip("Unimplemented test case.")
 class PartitionIsFlagAvailableTestCase(unittest.TestCase):
     def runTest(self):
         # TODO
         self.fail("Unimplemented test case.")
 
+@unittest.skip("Unimplemented test case.")
 class PartitionNextPartitionTestCase(unittest.TestCase):
     def runTest(self):
         # TODO
         self.fail("Unimplemented test case.")
 
+@unittest.skip("Unimplemented test case.")
 class PartitionGetSizeTestCase(unittest.TestCase):
     def runTest(self):
         # TODO
         self.fail("Unimplemented test case.")
 
+class PartitionGetLengthTestCase(RequiresDisk):
+    def runTest(self):
+        length = 100
+        geom = parted.Geometry(self._device, start=100, length=length)
+        part = parted.Partition(self._disk, parted.PARTITION_NORMAL, geometry=geom)
+        constraint = parted.Constraint(exactGeom=geom)
+        self._disk.addPartition(part, constraint)
+        self._disk.commit()
+        part = self._disk.partitions[0]
+
+        self.assertEqual(part.getLength(), part.geometry.length)
+        self.assertEqual(part.getLength(), length)
+
+@unittest.skip("Unimplemented test case.")
 class PartitionGetFlagsAsStringTestCase(unittest.TestCase):
     def runTest(self):
         # TODO
         self.fail("Unimplemented test case.")
 
+@unittest.skip("Unimplemented test case.")
 class PartitionGetMaxAvailableSizeTestCase(unittest.TestCase):
     def runTest(self):
         # TODO
         self.fail("Unimplemented test case.")
 
+@unittest.skip("Unimplemented test case.")
 class PartitionGetDeviceNodeNameTestCase(unittest.TestCase):
     def runTest(self):
         # TODO
         self.fail("Unimplemented test case.")
 
+@unittest.skip("Unimplemented test case.")
 class PartitionGetPedPartitionTestCase(unittest.TestCase):
     def runTest(self):
         # TODO
         self.fail("Unimplemented test case.")
 
+@unittest.skip("Unimplemented test case.")
 class PartitionStrTestCase(unittest.TestCase):
     def runTest(self):
         # TODO
@@ -109,6 +137,7 @@ def suite():
     suite.addTest(PartitionIsFlagAvailableTestCase())
     suite.addTest(PartitionNextPartitionTestCase())
     suite.addTest(PartitionGetSizeTestCase())
+    suite.addTest(PartitionGetLengthTestCase())
     suite.addTest(PartitionGetFlagsAsStringTestCase())
     suite.addTest(PartitionGetMaxAvailableSizeTestCase())
     suite.addTest(PartitionGetDeviceNodeNameTestCase())
@@ -117,4 +146,5 @@ def suite():
     return suite
 
 s = suite()
-unittest.TextTestRunner(verbosity=2).run(s)
+if __name__ == "__main__":
+    unittest.main(defaultTest='s', verbosity=2)

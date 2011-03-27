@@ -1,4 +1,3 @@
-#!/usr/bin/python
 #
 # Copyright (C) 2009  Red Hat, Inc.
 #
@@ -38,26 +37,31 @@ class DiskNewLabeledTestCase(RequiresLabeledDevice):
         self.assertTrue(isinstance(result, _ped.Disk))
         self.assertEquals(result.type.name, 'msdos')
 
+@unittest.skip("Unimplemented test case.")
 class DiskGetSetTestCase(unittest.TestCase):
     # TODO
     def runTest(self):
         self.fail("Unimplemented test case.")
 
+@unittest.skip("Unimplemented test case.")
 class DiskClobberTestCase(unittest.TestCase):
     # TODO
     def runTest(self):
         self.fail("Unimplemented test case.")
 
+@unittest.skip("Unimplemented test case.")
 class DiskClobberExcludeTestCase(unittest.TestCase):
     # TODO
     def runTest(self):
         self.fail("Unimplemented test case.")
 
+@unittest.skip("Unimplemented test case.")
 class DiskDuplicateTestCase(unittest.TestCase):
     # TODO
     def runTest(self):
         self.fail("Unimplemented test case.")
 
+@unittest.skip("Unimplemented test case.")
 class DiskDestroyTestCase(unittest.TestCase):
     # TODO
     def runTest(self):
@@ -79,6 +83,7 @@ class DiskCheckTestCase(RequiresDisk):
     def runTest(self):
         self.assertTrue(self._disk.check())
 
+@unittest.skip("Unimplemented test case.")
 class DiskPrintTestCase(unittest.TestCase):
     # TODO
     def runTest(self):
@@ -144,56 +149,67 @@ class DiskIsFlagAvailableTestCase(RequiresDisk):
         # However, an invalid flag should definitely not be available.
         self.assertFalse(self._disk.is_flag_available(1000))
 
+@unittest.skip("Unimplemented test case.")
 class DiskAddPartitionTestCase(unittest.TestCase):
     # TODO
     def runTest(self):
         self.fail("Unimplemented test case.")
 
+@unittest.skip("Unimplemented test case.")
 class DiskRemovePartitionTestCase(unittest.TestCase):
     # TODO
     def runTest(self):
         self.fail("Unimplemented test case.")
 
+@unittest.skip("Unimplemented test case.")
 class DiskDeletePartitionTestCase(unittest.TestCase):
     # TODO
     def runTest(self):
         self.fail("Unimplemented test case.")
 
+@unittest.skip("Unimplemented test case.")
 class DiskDeleteAllTestCase(unittest.TestCase):
     # TODO
     def runTest(self):
         self.fail("Unimplemented test case.")
 
+@unittest.skip("Unimplemented test case.")
 class DiskSetPartitionGeomTestCase(unittest.TestCase):
     # TODO
     def runTest(self):
         self.fail("Unimplemented test case.")
 
+@unittest.skip("Unimplemented test case.")
 class DiskMaxmimzePartitionTestCase(unittest.TestCase):
     # TODO
     def runTest(self):
         self.fail("Unimplemented test case.")
 
+@unittest.skip("Unimplemented test case.")
 class DiskGetMaxPartitionGeoemtryTestCase(unittest.TestCase):
     # TODO
     def runTest(self):
         self.fail("Unimplemented test case.")
 
+@unittest.skip("Unimplemented test case.")
 class DiskMinimizeExtendedPartitionTestCase(unittest.TestCase):
     # TODO
     def runTest(self):
         self.fail("Unimplemented test case.")
 
+@unittest.skip("Unimplemented test case.")
 class DiskNextPartitionTestCase(unittest.TestCase):
     # TODO
     def runTest(self):
         self.fail("Unimplemented test case.")
 
+@unittest.skip("Unimplemented test case.")
 class DiskGetPartitionTestCase(unittest.TestCase):
     # TODO
     def runTest(self):
         self.fail("Unimplemented test case.")
 
+@unittest.skip("Unimplemented test case.")
 class DiskGetPartitionBySectorTestCase(unittest.TestCase):
     # TODO
     def runTest(self):
@@ -251,4 +267,5 @@ def suite():
     return suite
 
 s = suite()
-unittest.TextTestRunner(verbosity=2).run(s)
+if __name__ == "__main__":
+    unittest.main(defaultTest='s', verbosity=2)
