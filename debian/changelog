@@ -1,3 +1,9 @@
+pyparted (3.6-1) UNRELEASED; urgency=low
+
+  * New upstream release.
+
+ -- Luca Falavigna <dktrkranz@debian.org>  Sun, 27 Mar 2011 11:57:13 +0200
+
 pyparted (3.5-1) unstable; urgency=low
 
   * New upstream release.
