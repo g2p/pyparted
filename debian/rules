@@ -3,7 +3,7 @@
 PYTHONS := $(shell pyversions -vr debian/control)
 
 %:
-	dh $@ --with python2
+	dh $@ --with python2,autoreconf
 
 clean:
 	rm -fr build
@@ -12,9 +12,9 @@ clean:
 override_dh_auto_configure:
 	for pyvers in ${PYTHONS}; do \
 		mkdir -p build/py$$pyvers; cp -Rl `ls . | grep -v build | grep -v debian` build/py$$pyvers;\
-		(cd build/py$$pyvers; autoreconf -fi -I m4 && ./configure --prefix=/usr PYTHON=python$$pyvers); \
+		(cd build/py$$pyvers; ./configure --prefix=/usr PYTHON=python$$pyvers); \
 		mkdir -p build/py$$pyvers-dbg; cp -Rl `ls . | grep -v build | grep -v debian` build/py$$pyvers-dbg; \
-		(cd build/py$$pyvers-dbg; autoreconf -fi -I m4 && ./configure --prefix=/usr PYTHON=python$$pyvers-dbg CFLAGS="-g -ggdb "); \
+		(cd build/py$$pyvers-dbg; ./configure --prefix=/usr PYTHON=python$$pyvers-dbg CFLAGS="-g -ggdb "); \
 	done
 
 override_dh_auto_build:  
