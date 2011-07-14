@@ -1,4 +1,4 @@
-pyparted (3.6-3) UNRELEASED; urgency=low
+pyparted (3.6-3) unstable; urgency=low
 
   * debian/control:
     - Build-depend on dh-autoreconf.
@@ -8,7 +8,7 @@ pyparted (3.6-3) UNRELEASED; urgency=low
     - Use autoreconf sequencer.
     - Do not install .la file (Closes: #633254).
 
- -- Luca Falavigna <dktrkranz@debian.org>  Thu, 14 Jul 2011 23:31:59 +0200
+ -- Luca Falavigna <dktrkranz@debian.org>  Thu, 14 Jul 2011 23:32:12 +0200
 
 pyparted (3.6-2) unstable; urgency=low
 
