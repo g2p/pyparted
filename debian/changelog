@@ -6,8 +6,9 @@ pyparted (3.6-3) UNRELEASED; urgency=low
     - Drop Breaks field, no longer needed.
   * debian/rules:
     - Use autoreconf sequencer.
+    - Do not install .la file (Closes: #633254).
 
- -- Luca Falavigna <dktrkranz@debian.org>  Thu, 21 Apr 2011 22:23:31 +0200
+ -- Luca Falavigna <dktrkranz@debian.org>  Thu, 14 Jul 2011 23:31:59 +0200
 
 pyparted (3.6-2) unstable; urgency=low
 
