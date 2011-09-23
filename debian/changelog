@@ -1,3 +1,10 @@
+pyparted (3.6-4) UNRELEASED; urgency=low
+
+  * debian/patches/py26.patch:
+    - Enable support for python2.6 (Closes: #642545).
+
+ -- Luca Falavigna <dktrkranz@debian.org>  Sat, 24 Sep 2011 01:16:37 +0200
+
 pyparted (3.6-3) unstable; urgency=low
 
   * debian/control:
