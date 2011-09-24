@@ -1,4 +1,4 @@
-pyparted (3.6-4) UNRELEASED; urgency=low
+pyparted (3.6-4) unstable; urgency=low
 
   * debian/patches/py26.patch:
     - Enable support for python2.6 (Closes: #642545).
@@ -7,7 +7,7 @@ pyparted (3.6-4) UNRELEASED; urgency=low
   * debian/copyright:
     - Adopt DEP5 syntax.
 
- -- Luca Falavigna <dktrkranz@debian.org>  Sat, 24 Sep 2011 10:38:33 +0200
+ -- Luca Falavigna <dktrkranz@debian.org>  Sat, 24 Sep 2011 10:40:36 +0200
 
 pyparted (3.6-3) unstable; urgency=low
 
