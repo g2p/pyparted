@@ -4,8 +4,10 @@ pyparted (3.6-4) UNRELEASED; urgency=low
     - Enable support for python2.6 (Closes: #642545).
   * debian/control:
     - Set X-Python-Version back to >= 2.6.
+  * debian/copyright:
+    - Adopt DEP5 syntax.
 
- -- Luca Falavigna <dktrkranz@debian.org>  Sat, 24 Sep 2011 01:19:30 +0200
+ -- Luca Falavigna <dktrkranz@debian.org>  Sat, 24 Sep 2011 10:38:33 +0200
 
 pyparted (3.6-3) unstable; urgency=low
 
