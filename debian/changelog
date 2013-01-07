@@ -1,4 +1,4 @@
-pyparted (3.6-5) UNRELEASED; urgency=low
+pyparted (3.6-5) unstable; urgency=low
 
   * debian/patches/no-last-flag-check.patch:
     - Remove explicit *_LAST_FLAG checks, which impose additional interface
@@ -8,7 +8,7 @@ pyparted (3.6-5) UNRELEASED; urgency=low
   * debian/control:
     - Add myself to Uploaders.
 
- -- Colin Watson <cjwatson@debian.org>  Mon, 07 Jan 2013 11:35:48 +0000
+ -- Colin Watson <cjwatson@debian.org>  Mon, 07 Jan 2013 11:53:42 +0000
 
 pyparted (3.6-4) unstable; urgency=low
 
