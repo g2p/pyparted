@@ -5,6 +5,8 @@ pyparted (3.6-5) UNRELEASED; urgency=low
       constraints not guaranteed by parted (closes: #697588).  We'll still
       get parted exceptions for invalid flags, although they'll no longer be
       ValueError.
+  * debian/control:
+    - Add myself to Uploaders.
 
  -- Colin Watson <cjwatson@debian.org>  Mon, 07 Jan 2013 11:35:48 +0000
 
