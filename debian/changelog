@@ -5,6 +5,9 @@ pyparted (3.6-6) UNRELEASED; urgency=low
     variable in order to correctly determine all multiarch include paths
     (closes: #697779).  Thanks to Colin Watson for the suggestion.
 
+  [ Colin Watson ]
+  * Improve debian/rules to stop immediately on errors.
+
  -- Tim Gardner <tim.gardner@canonical.com>  Wed, 09 Jan 2013 17:22:01 +0000
 
 pyparted (3.6-5) unstable; urgency=low

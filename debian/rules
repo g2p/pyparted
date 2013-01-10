@@ -10,24 +10,24 @@ clean:
 	dh $@
 
 override_dh_auto_configure:
-	for pyvers in ${PYTHONS}; do \
+	set -e; for pyvers in ${PYTHONS}; do \
 		mkdir -p build/py$$pyvers; cp -Rl `ls . | grep -v build | grep -v debian` build/py$$pyvers;\
-		(cd build/py$$pyvers; ./configure --prefix=/usr PYTHON=/usr/bin/python$$pyvers); \
+		(cd build/py$$pyvers && ./configure --prefix=/usr PYTHON=/usr/bin/python$$pyvers); \
 		mkdir -p build/py$$pyvers-dbg; cp -Rl `ls . | grep -v build | grep -v debian` build/py$$pyvers-dbg; \
-		(cd build/py$$pyvers-dbg; ./configure --prefix=/usr PYTHON=/usr/bin/python$$pyvers-dbg CFLAGS="-g -ggdb "); \
+		(cd build/py$$pyvers-dbg && ./configure --prefix=/usr PYTHON=/usr/bin/python$$pyvers-dbg CFLAGS="-g -ggdb "); \
 	done
 
 override_dh_auto_build:  
-	for pyvers in ${PYTHONS}; do \
-		(cd build/py$$pyvers/; $(MAKE)); \
-		(cd build/py$$pyvers-dbg/; $(MAKE)); \
+	set -e; for pyvers in ${PYTHONS}; do \
+		$(MAKE) -C build/py$$pyvers/; \
+		$(MAKE) -C build/py$$pyvers-dbg/; \
 	done
 
 override_dh_auto_install:
-	for pyvers in ${PYTHONS}; do \
-		(cd build/py$$pyvers/; $(MAKE) install DESTDIR=$(CURDIR)/debian/python-parted); \
-		(cd build/py$$pyvers-dbg/; $(MAKE) install DESTDIR=$(CURDIR)/debian/python-parted-dbg); \
-		(cd $(CURDIR)/debian/python-parted-dbg/usr/lib/python$$pyvers/*-packages; mv _pedmodule.so _pedmodule_d.so); \
+	set -e; for pyvers in ${PYTHONS}; do \
+		$(MAKE) -C build/py$$pyvers/ install DESTDIR=$(CURDIR)/debian/python-parted; \
+		$(MAKE) -C build/py$$pyvers-dbg/ install DESTDIR=$(CURDIR)/debian/python-parted-dbg; \
+		(cd $(CURDIR)/debian/python-parted-dbg/usr/lib/python$$pyvers/*-packages && mv _pedmodule.so _pedmodule_d.so); \
 	done
 	find $(CURDIR)/debian/python-parted -name "*.la" -delete
 	find $(CURDIR)/debian/python-parted-dbg -name "*parted" -exec rm -fr {} +
