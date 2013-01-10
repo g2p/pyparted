@@ -12,15 +12,15 @@ clean:
 override_dh_auto_configure:
 	for pyvers in ${PYTHONS}; do \
 		mkdir -p build/py$$pyvers; cp -Rl `ls . | grep -v build | grep -v debian` build/py$$pyvers;\
-		(cd build/py$$pyvers; ./configure --prefix=/usr PYTHON=python$$pyvers); \
+		(cd build/py$$pyvers; ./configure --prefix=/usr PYTHON=/usr/bin/python$$pyvers); \
 		mkdir -p build/py$$pyvers-dbg; cp -Rl `ls . | grep -v build | grep -v debian` build/py$$pyvers-dbg; \
-		(cd build/py$$pyvers-dbg; ./configure --prefix=/usr PYTHON=python$$pyvers-dbg CFLAGS="-g -ggdb "); \
+		(cd build/py$$pyvers-dbg; ./configure --prefix=/usr PYTHON=/usr/bin/python$$pyvers-dbg CFLAGS="-g -ggdb "); \
 	done
 
 override_dh_auto_build:  
 	for pyvers in ${PYTHONS}; do \
-		(cd build/py$$pyvers/; $(MAKE) PYTHON=python$$pyvers); \
-		(cd build/py$$pyvers-dbg/; $(MAKE) PYTHON=python$$pyvers-dbg PYTHON_INCLUDES=`python$$pyvers-dbg-config --include`); \
+		(cd build/py$$pyvers/; $(MAKE)); \
+		(cd build/py$$pyvers-dbg/; $(MAKE)); \
 	done
 
 override_dh_auto_install:
