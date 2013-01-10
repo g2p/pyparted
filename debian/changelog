@@ -1,4 +1,4 @@
-pyparted (3.6-6) UNRELEASED; urgency=low
+pyparted (3.6-6) unstable; urgency=low
 
   [ Tim Gardner ]
   * m4/python.m4 really wants the full path in the PYTHON environment
@@ -8,7 +8,7 @@ pyparted (3.6-6) UNRELEASED; urgency=low
   [ Colin Watson ]
   * Improve debian/rules to stop immediately on errors.
 
- -- Tim Gardner <tim.gardner@canonical.com>  Wed, 09 Jan 2013 17:22:01 +0000
+ -- Colin Watson <cjwatson@debian.org>  Thu, 10 Jan 2013 11:35:02 +0000
 
 pyparted (3.6-5) unstable; urgency=low
 
