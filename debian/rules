@@ -1,36 +1,10 @@
 #!/usr/bin/make -f
 
-PYTHONS := $(shell pyversions -vr debian/control)
+export PYBUILD_DESTDIR_python2=debian/python-parted
+export PYBUILD_DESTDIR_python2-dbg=debian/python-parted-dbg
+export PYBUILD_DESTDIR_python3=debian/python3-parted
+export PYBUILD_DESTDIR_python3-dbg=debian/python3-parted-dbg
+
 
 %:
-	dh $@ --with python2,autoreconf
-
-clean:
-	rm -fr build
-	dh $@
-
-override_dh_auto_configure:
-	set -e; for pyvers in ${PYTHONS}; do \
-		mkdir -p build/py$$pyvers; cp -Rl `ls . | grep -v build | grep -v debian` build/py$$pyvers;\
-		(cd build/py$$pyvers && ./configure --prefix=/usr PYTHON=/usr/bin/python$$pyvers); \
-		mkdir -p build/py$$pyvers-dbg; cp -Rl `ls . | grep -v build | grep -v debian` build/py$$pyvers-dbg; \
-		(cd build/py$$pyvers-dbg && ./configure --prefix=/usr PYTHON=/usr/bin/python$$pyvers-dbg CFLAGS="-g -ggdb "); \
-	done
-
-override_dh_auto_build:  
-	set -e; for pyvers in ${PYTHONS}; do \
-		$(MAKE) -C build/py$$pyvers/; \
-		$(MAKE) -C build/py$$pyvers-dbg/; \
-	done
-
-override_dh_auto_install:
-	set -e; for pyvers in ${PYTHONS}; do \
-		$(MAKE) -C build/py$$pyvers/ install DESTDIR=$(CURDIR)/debian/python-parted; \
-		$(MAKE) -C build/py$$pyvers-dbg/ install DESTDIR=$(CURDIR)/debian/python-parted-dbg; \
-		(cd $(CURDIR)/debian/python-parted-dbg/usr/lib/python$$pyvers/*-packages && mv _pedmodule.so _pedmodule_d.so); \
-	done
-	find $(CURDIR)/debian/python-parted -name "*.la" -delete
-	find $(CURDIR)/debian/python-parted-dbg -name "*parted" -exec rm -fr {} +
-
-override_dh_strip:
-	dh_strip --dbg-package=python-parted-dbg -X_pedmodule_d.so
+	dh $@ --with python2,python3 --buildsystem=pybuild

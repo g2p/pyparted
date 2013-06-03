@@ -1,3 +1,10 @@
+pyparted (3.10-1) unstable; urgency=low
+
+  * New upstream release
+  * Python 3 support
+
+ -- Gabriel de Perthuis <g2p.code+debian@gmail.com>  Mon, 03 Jun 2013 22:26:37 +0200
+
 pyparted (3.6-6) unstable; urgency=low
 
   [ Tim Gardner ]
