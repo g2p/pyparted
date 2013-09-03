@@ -1,4 +1,4 @@
-pyparted (3.10-1) unstable; urgency=low
+pyparted (3.10-1~ppa) raring; urgency=low
 
   * New upstream release
   * Python 3 support
