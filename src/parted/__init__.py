@@ -2,7 +2,7 @@
 # __init__.py
 # Python bindings for libparted (built on top of the _ped Python module).
 #
-# Copyright (C) 2007, 2008, 2009  Red Hat, Inc.
+# Copyright (C) 2007-2013 Red Hat, Inc.
 #
 # This copyrighted material is made available to anyone wishing to use,
 # modify, copy, or redistribute it subject to the terms and conditions of
@@ -18,8 +18,9 @@
 # License and may only be used or replicated with the express permission of
 # Red Hat, Inc.
 #
-# Red Hat Author(s): David Cantrell <dcantrell@redhat.com>
-#                    Chris Lumens <clumens@redhat.com>
+# Author(s): David Cantrell <dcantrell@redhat.com>
+#            Chris Lumens <clumens@redhat.com>
+#            Alex Skinner <alex@lx.lc>
 #
 
 from __future__ import division
@@ -48,17 +49,17 @@ from _ped import TimerException
 from _ped import UnknownDeviceException
 from _ped import UnknownTypeException
 
-from alignment import Alignment
-from constraint import Constraint
-from device import Device
-from disk import Disk
-from disk import diskType
-from disk import diskFlag
-from filesystem import FileSystem
-from filesystem import fileSystemType
-from geometry import Geometry
-from partition import Partition
-from partition import partitionFlag
+from .alignment import Alignment
+from .constraint import Constraint
+from .device import Device
+from .disk import Disk
+from .disk import diskType
+from .disk import diskFlag
+from .filesystem import FileSystem
+from .filesystem import fileSystemType
+from .geometry import Geometry
+from .partition import Partition
+from .partition import partitionFlag
 
 # the enumerated types in _ped need to be available from here too
 from _ped import UNIT_SECTOR
@@ -114,17 +115,20 @@ from _ped import PARTITION_MSFT_RESERVED
 from _ped import PARTITION_APPLE_TV_RECOVERY
 from _ped import PARTITION_BIOS_GRUB
 from _ped import PARTITION_DIAG
-try:
-    from _ped import PARTITION_LEGACY_BOOT
-except ImportError:
-    pass
+from _ped import PARTITION_LEGACY_BOOT
 
 from _ped import DISK_CYLINDER_ALIGNMENT
+from _ped import DISK_GPT_PMBR_BOOT
 
 from _ped import DISK_TYPE_EXTENDED
 from _ped import DISK_TYPE_PARTITION_NAME
 
-from decorators import localeC
+from .decorators import localeC
+
+if sys.version_info >= (3,):
+    string_types = str
+else:
+    string_types = basestring
 
 partitionTypesDict = {
     0x00: "Empty",
@@ -405,12 +409,21 @@ def freshDisk(device, ty):
        is called on the Disk."""
     from _ped import disk_new_fresh, DiskType
 
-    if type(ty) == str:
+    if isinstance(ty, string_types):
         ty = diskType[ty]
     elif not isinstance(ty, DiskType):
-        raise SyntaxError, "type must be a key or value in parted.diskType"
+        raise TypeError("type must be a key or value in parted.diskType", ty)
 
     peddisk = disk_new_fresh(device.getPedDevice(), ty)
+    return Disk(PedDisk=peddisk)
+
+@localeC
+def newDisk(device):
+    """Return a Disk object for this Device. Read the partition table off
+       a device (if one is found)."""
+    from _ped import disk_new
+
+    peddisk = disk_new(device.getPedDevice())
     return Disk(PedDisk=peddisk)
 
 @localeC

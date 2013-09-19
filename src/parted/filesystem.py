@@ -2,7 +2,7 @@
 # filesystem.py
 # Python bindings for libparted (built on top of the _ped Python module).
 #
-# Copyright (C) 2009  Red Hat, Inc.
+# Copyright (C) 2009-2013 Red Hat, Inc.
 #
 # This copyrighted material is made available to anyone wishing to use,
 # modify, copy, or redistribute it subject to the terms and conditions of
@@ -18,13 +18,14 @@
 # License and may only be used or replicated with the express permission of
 # Red Hat, Inc.
 #
-# Red Hat Author(s): David Cantrell <dcantrell@redhat.com>
+# Author(s): David Cantrell <dcantrell@redhat.com>
+#            Alex Skinner <alex@lx.lc>
 #
 
 import _ped
 import parted
 
-from decorators import localeC
+from .decorators import localeC
 
 # XXX: add docstrings!
 
@@ -38,9 +39,9 @@ class FileSystem(object):
 
         if PedFileSystem is None:
             if type is None:
-                raise parted.FileSystemException, "no type specified"
+                raise parted.FileSystemException("no type specified")
             elif geometry is None:
-                raise parted.FileSystemException, "no geometry specified"
+                raise parted.FileSystemException("no geometry specified")
 
             self._type = type
             self._geometry = geometry
@@ -90,43 +91,6 @@ class FileSystem(object):
     def checked(self):
         """True if this filesystem has been checked, False otherwise."""
         return bool(self._checked)
-
-    @localeC
-    def clobber(self):
-        return self.__fileSystem.clobber()
-
-    @localeC
-    def open(self):
-        return parted.FileSystem(PedFileSystem=self.__fileSystem.open())
-
-    # XXX: this can take in a Timer
-    @localeC
-    def create(self):
-        return parted.FileSystem(PedFileSystem=self.__fileSystem.create())
-
-    @localeC
-    def close(self):
-        return self.__fileSystem.close()
-
-    # XXX: this can take in a Timer
-    @localeC
-    def check(self):
-        return self.__fileSystem.check()
-        self._checked = self.__fileSystem.checked
-
-    # XXX: this can take in a Timer
-    @localeC
-    def copy(self, geometry):
-        return parted.FileSystem(PedFileSystem=self.__fileSystem.copy(geometry.getPedGeometry()))
-
-    # XXX: this can take in a Timer
-    @localeC
-    def resize(self, geometry):
-        return self.__fileSystem.resize(geometry.getPedGeometry())
-
-    @localeC
-    def getResizeConstraint(self):
-        return parted.Constraint(PedConstraint=self.__fileSystem.get_resize_constraint())
 
     def getPedFileSystem(self):
         """Return the _ped.FileSystem object contained in this FileSystem.

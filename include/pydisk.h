@@ -2,7 +2,7 @@
  * pydisk.h
  * pyparted type definitions for pydisk.c
  *
- * Copyright (C) 2007, 2008, 2009  Red Hat, Inc.
+ * Copyright (C) 2007-2013 Red Hat, Inc.
  *
  * This copyrighted material is made available to anyone wishing to use,
  * modify, copy, or redistribute it subject to the terms and conditions of
@@ -18,8 +18,9 @@
  * License and may only be used or replicated with the express permission of
  * Red Hat, Inc.
  *
- * Red Hat Author(s): David Cantrell <dcantrell@redhat.com>
- *                    Chris Lumens <clumens@redhat.com>
+ * Author(s): David Cantrell <dcantrell@redhat.com>
+ *            Chris Lumens <clumens@redhat.com>
+ *            Alex Skinner <alex@lx.lc>
  */
 
 #ifndef PYDISK_H_INCLUDED
@@ -151,6 +152,7 @@ PyObject *py_ped_disk_get_partition(PyObject *, PyObject *);
 PyObject *py_ped_disk_get_partition_by_sector(PyObject *, PyObject *);
 PyObject *py_ped_disk_extended_partition(PyObject *, PyObject *);
 PyObject *py_ped_disk_new_fresh(PyObject *, PyObject *);
+PyObject *py_ped_disk_new(PyObject *, PyObject *);
 
 #endif /* PYDISK_H_INCLUDED */
 

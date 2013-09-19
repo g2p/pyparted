@@ -1,7 +1,7 @@
 /*
  * pynatmath.c
  *
- * Copyright (C) 2007, 2008, 2009  Red Hat, Inc.
+ * Copyright (C) 2007-2013 Red Hat, Inc.
  *
  * This copyrighted material is made available to anyone wishing to use,
  * modify, copy, or redistribute it subject to the terms and conditions of
@@ -17,8 +17,9 @@
  * License and may only be used or replicated with the express permission of
  * Red Hat, Inc.
  *
- * Red Hat Author(s): David Cantrell <dcantrell@redhat.com>
- *                    Chris Lumens <clumens@redhat.com>
+ * Author(s): David Cantrell <dcantrell@redhat.com>
+ *            Chris Lumens <clumens@redhat.com>
+ *            Alex Skinner <alex@lx.lc>
  */
 
 #include <Python.h>
@@ -59,18 +60,11 @@ int _ped_Alignment_compare(_ped_Alignment *self, PyObject *obj) {
 }
 
 PyObject *_ped_Alignment_richcompare(_ped_Alignment *a, PyObject *b, int op) {
-    if (op == Py_EQ) {
-        if (!(_ped_Alignment_Type_obj.tp_compare((PyObject *) a, b))) {
-            Py_RETURN_TRUE;
-        } else {
-            Py_RETURN_FALSE;
-        }
-    } else if (op == Py_NE) {
-        if (_ped_Alignment_Type_obj.tp_compare((PyObject *) a, b)) {
-            Py_RETURN_TRUE;
-        } else {
-            Py_RETURN_FALSE;
-        }
+    if (op == Py_EQ || op == Py_NE) {
+        int rv = _ped_Alignment_compare(a, b);
+        if (PyErr_Occurred())
+            return NULL;
+        return PyBool_FromLong(op == Py_EQ ? rv == 0 : rv != 0);
     } else if ((op == Py_LT) || (op == Py_LE) ||
                (op == Py_GT) || (op == Py_GE)) {
         PyErr_SetString(PyExc_TypeError, "comparison operator not supported for _ped.Alignment");
@@ -132,9 +126,9 @@ PyObject *_ped_Alignment_get(_ped_Alignment *self, void *closure) {
     }
 
     if (!strcmp(member, "offset")) {
-        return PyLong_FromLongLong(self->offset);
+        return PyLong_FromLong(self->offset);
     } else if (!strcmp(member, "grain_size")) {
-        return PyLong_FromLongLong(self->grain_size);
+        return PyLong_FromLong(self->grain_size);
     } else {
         PyErr_Format(PyExc_AttributeError, "_ped.Alignment object has no attribute %s", member);
         return NULL;
@@ -149,12 +143,12 @@ int _ped_Alignment_set(_ped_Alignment *self, PyObject *value, void *closure) {
     }
 
     if (!strcmp(member, "offset")) {
-        self->offset = PyLong_AsLongLong(value);
+        self->offset = PyLong_AsLong(value);
         if (PyErr_Occurred()) {
             return -1;
         }
     } else if (!strcmp(member, "grain_size")) {
-        self->grain_size = PyLong_AsLongLong(value);
+        self->grain_size = PyLong_AsLong(value);
         if (PyErr_Occurred()) {
             return -1;
         }
@@ -258,7 +252,7 @@ PyObject *py_ped_alignment_align_up(PyObject *s, PyObject *args) {
         return NULL;
     }
 
-    return PyLong_FromLongLong(ret);
+    return PyLong_FromLong(ret);
 }
 
 PyObject *py_ped_alignment_align_down(PyObject *s, PyObject *args) {
@@ -290,7 +284,7 @@ PyObject *py_ped_alignment_align_down(PyObject *s, PyObject *args) {
         return NULL;
     }
 
-    return PyLong_FromLongLong(ret);
+    return PyLong_FromLong(ret);
 }
 
 PyObject *py_ped_alignment_align_nearest(PyObject *s, PyObject *args) {
@@ -322,7 +316,7 @@ PyObject *py_ped_alignment_align_nearest(PyObject *s, PyObject *args) {
         return NULL;
     }
 
-    return PyLong_FromLongLong(ret);
+    return PyLong_FromLong(ret);
 }
 
 PyObject *py_ped_alignment_is_aligned(PyObject *s, PyObject *args) {

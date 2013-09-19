@@ -1,7 +1,7 @@
 /*
  * pytimer.c
  *
- * Copyright (C) 2007, 2008, 2009  Red Hat, Inc.
+ * Copyright (C) 2007-2013 Red Hat, Inc.
  *
  * This copyrighted material is made available to anyone wishing to use,
  * modify, copy, or redistribute it subject to the terms and conditions of
@@ -17,8 +17,9 @@
  * License and may only be used or replicated with the express permission of
  * Red Hat, Inc.
  *
- * Red Hat Author(s): David Cantrell <dcantrell@redhat.com>
- *                    Chris Lumens <clumens@redhat.com>
+ * Author(s): David Cantrell <dcantrell@redhat.com>
+ *            Chris Lumens <clumens@redhat.com>
+ *            Alex Skinner <alex@lx.lc>
  */
 
 #include <Python.h>
@@ -63,18 +64,11 @@ int _ped_Timer_compare(_ped_Timer *self, PyObject *obj) {
 }
 
 PyObject *_ped_Timer_richcompare(_ped_Timer *a, PyObject *b, int op) {
-    if (op == Py_EQ) {
-        if (!(_ped_Timer_Type_obj.tp_compare((PyObject *) a, b))) {
-            Py_RETURN_TRUE;
-        } else {
-            Py_RETURN_FALSE;
-        }
-    } else if (op == Py_NE) {
-        if (_ped_Timer_Type_obj.tp_compare((PyObject *) a, b)) {
-            Py_RETURN_TRUE;
-        } else {
-            Py_RETURN_FALSE;
-        }
+    if (op == Py_EQ || op == Py_NE) {
+        int rv = _ped_Timer_compare(a, b);
+        if (PyErr_Occurred())
+            return NULL;
+        return PyBool_FromLong(op == Py_EQ ? rv == 0 : rv != 0);
     } else if ((op == Py_LT) || (op == Py_LE) ||
                (op == Py_GT) || (op == Py_GE)) {
         PyErr_SetString(PyExc_TypeError, "comparison operator not supported for _ped.Timer");
@@ -131,7 +125,7 @@ int _ped_Timer_init(_ped_Timer *self, PyObject *args, PyObject *kwds) {
             return -2;
     }
 
-     /* self->state_name now points to the internal buffer of a PyString object,
+     /* self->state_name now points to the internal buffer of a PyUnicode object,
       * which may be freed when its refcount drops to zero, so strdup it.
       */
      if (self->state_name) {
@@ -163,9 +157,9 @@ PyObject *_ped_Timer_get(_ped_Timer *self, void *closure) {
         return Py_BuildValue("d", self->predicted_end);
     } else if (!strcmp(member, "state_name")) {
         if (self->state_name != NULL)
-            return PyString_FromString(self->state_name);
+            return PyUnicode_FromString(self->state_name);
         else
-            return PyString_FromString("");
+            return PyUnicode_FromString("");
     } else {
         PyErr_Format(PyExc_AttributeError, "_ped.Timer object has no attribute %s", member);
         return NULL;
@@ -200,11 +194,11 @@ int _ped_Timer_set(_ped_Timer *self, PyObject *value, void *closure) {
             return -1;
         }
     } else if (!strcmp(member, "state_name")) {
-        self->state_name = PyString_AsString(value);
+        self->state_name = PyUnicode_AsUTF8(value);
         if (PyErr_Occurred()) {
             return -1;
         }
-        /* self->state_name now points to the internal buffer of a PyString obj
+        /* self->state_name now points to the internal buffer of a PyUnicode obj
          * which may be freed when its refcount drops to zero, so strdup it.
          */
         if (self->state_name) {

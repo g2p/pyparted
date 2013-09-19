@@ -2,7 +2,7 @@
 # geometry.py
 # Python bindings for libparted (built on top of the _ped Python module).
 #
-# Copyright (C) 2009 Red Hat, Inc.
+# Copyright (C) 2009-2013 Red Hat, Inc.
 #
 # This copyrighted material is made available to anyone wishing to use,
 # modify, copy, or redistribute it subject to the terms and conditions of
@@ -18,8 +18,9 @@
 # License and may only be used or replicated with the express permission of
 # Red Hat, Inc.
 #
-# Red Hat Author(s): Chris Lumens <clumens@redhat.com>
-#                    David Cantrell <dcantrell@redhat.com>
+# Author(s): Chris Lumens <clumens@redhat.com>
+#            David Cantrell <dcantrell@redhat.com>
+#            Alex Skinner <alex@lx.lc>
 #
 
 import math
@@ -28,7 +29,7 @@ import warnings
 import _ped
 import parted
 
-from decorators import localeC
+from .decorators import localeC
 
 class Geometry(object):
     """Geometry()
@@ -60,7 +61,7 @@ class Geometry(object):
             self._device = device
             self.__geometry = _ped.Geometry(self.device.getPedDevice(), start, length, end=end)
         else:
-            raise parted.GeometryException, "must specify PedGeometry or (device, start, length) or (device, start, end) or (device, start, length, end)"
+            raise parted.GeometryException("must specify PedGeometry or (device, start, length) or (device, start, end) or (device, start, length, end)")
 
     def __eq__(self, other):
         return not self.__ne__(other)
@@ -126,7 +127,7 @@ class Geometry(object):
         size = self.length * self.device.sectorSize
 
         if lunit not in parted._exponent.keys():
-            raise SyntaxError, "invalid unit %s given" % (unit,)
+            raise SyntaxError("invalid unit %s given" % (unit))
 
         return (size / math.pow(1024.0, parted._exponent[lunit]))
 

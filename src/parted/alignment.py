@@ -18,14 +18,15 @@
 # License and may only be used or replicated with the express permission of
 # Red Hat, Inc.
 #
-# Red Hat Author(s): Chris Lumens <clumens@redhat.com>
-#                    David Cantrell <dcantrell@redhat.com>
+# Author(s): Chris Lumens <clumens@redhat.com>
+#            David Cantrell <dcantrell@redhat.com>
+#            Alex Skinner <alex@lx.lc>
 #
 
 import parted
 import _ped
 
-from decorators import localeC
+from .decorators import localeC
 
 class Alignment(object):
     """Alignment()
@@ -39,13 +40,13 @@ class Alignment(object):
     def __init__(self, *args, **kwargs):
         """Create a new Alignment object from the sectors offset and
            grainSize."""
-        if kwargs.has_key("PedAlignment"):
+        if "PedAlignment" in kwargs:
             self.__alignment = kwargs.get("PedAlignment")
-        elif kwargs.has_key("offset") and kwargs.has_key("grainSize"):
+        elif "offset" in kwargs and "grainSize" in kwargs:
             self.__alignment = _ped.Alignment(kwargs.get("offset"),
                                               kwargs.get("grainSize"))
         else:
-            raise parted.AlignmentException, "no offset+grainSize or PedAlignment specified"
+            raise parted.AlignmentException("no offset+grainSize or PedAlignment specified")
 
     offset = property(lambda s: s.__alignment.offset, lambda s, v: setattr(s.__alignment, "offset", v))
     grainSize = property(lambda s: s.__alignment.grain_size, lambda s, v: setattr(s.__alignment, "grain_size", v))
@@ -106,10 +107,10 @@ class Alignment(object):
         """Determine whether sector lies inside geom and satisfies the
            alignment constraint self."""
         if not geom:
-            raise TypeError, "missing parted.Geometry parameter"
+            raise TypeError("missing parted.Geometry parameter")
 
         if sector is None:
-            raise TypeError, "missing sector parameter"
+            raise TypeError("missing sector parameter")
 
         return self.__alignment.is_aligned(geom.getPedGeometry(), sector)
 
