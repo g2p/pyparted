@@ -2,7 +2,7 @@
  * convert.h
  * Functions for converting to/from Python _ped types and C libparted types
  *
- * Copyright (C) 2007, 2008, 2009  Red Hat, Inc.
+ * Copyright (C) 2007-2013 Red Hat, Inc.
  *
  * This copyrighted material is made available to anyone wishing to use,
  * modify, copy, or redistribute it subject to the terms and conditions of
@@ -18,8 +18,9 @@
  * License and may only be used or replicated with the express permission of
  * Red Hat, Inc.
  *
- * Red Hat Author(s): David Cantrell <dcantrell@redhat.com>
- *                    Chris Lumens <clumens@redhat.com>
+ * Author(s): David Cantrell <dcantrell@redhat.com>
+ *            Chris Lumens <clumens@redhat.com>
+ *            Alex Skinner <alex@lx.lc>
  */
 
 #ifndef CONVERT_H_INCLUDED
@@ -34,6 +35,15 @@
 #include "pygeom.h"
 #include "pynatmath.h"
 #include "pytimer.h"
+
+#if PY_MAJOR_VERSION < 3
+#define PyUnicode_AsUTF8 PyString_AsString
+#define TP_FLAGS (Py_TPFLAGS_HAVE_CLASS | Py_TPFLAGS_CHECKTYPES | Py_TPFLAGS_HAVE_GC | Py_TPFLAGS_BASETYPE | Py_TPFLAGS_HAVE_RICHCOMPARE)
+#else
+// XXX Restore tp_richcompare?
+#define TP_FLAGS (Py_TPFLAGS_HAVE_GC | Py_TPFLAGS_BASETYPE)
+#endif
+
 
 PedAlignment *_ped_Alignment2PedAlignment(PyObject *);
 _ped_Alignment *PedAlignment2_ped_Alignment(PedAlignment *);

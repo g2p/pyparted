@@ -1,3 +1,450 @@
+commit 9465f0b6557b2ff47c81e13f83f75921e896f57a
+Author: David Cantrell <dcantrell@redhat.com>
+Date:   Thu May 23 09:21:33 2013 -0400
+
+    New version.
+
+commit 36384816c56d666bbf3492ddcc531bf4c4a38674
+Author: Nageswara R Sastry <rnsastry@linux.vnet.ibm.com>
+Date:   Thu May 23 09:14:10 2013 -0400
+
+    Subject: [PATCH] pyparted: export ped_disk_new functionality
+    
+    Fixed Block Access (FBA) DASDs are mainframe-specific disk devices
+    which are layed out as a sequence of 512-byte sectors. In contrast
+    to ECKD DASDs, these disks do not require formatting and resemble
+    the LBA layout of non-mainframe disks. Despite this resemblance,
+    the Linux kernel applies special handling during partition detection
+    for FBA DASDs, resulting in a single, immutable partition being
+    reported.
+    
+    While actual FBA DASD hardware is no longer available, the z/VM
+    hypervisor can simulate FBA DASD disks, backed by either ECKD or
+    SCSI devices.
+    
+    This patch adds support for FBA DASD partitions and successful
+    installation by Anaconda.
+    
+    Signed-off-by: Nageswara R Sastry <rnsastry@linux.vnet.ibm.com>
+
+commit 40037e892783eb97c3e25cab730b916430eb60f8
+Author: David Cantrell <dcantrell@redhat.com>
+Date:   Tue Apr 9 11:40:02 2013 -0400
+
+    Correct boilerplate modifications.
+    
+    The boilerplate in source files is not freeform.  Please adhere to
+    the format listed.  If the authors listing says "Red Hat Author(s)",
+    it is ok to change that to just "Author(s)" and add your name to the
+    listing.  Please adjust the copyright date range as well when you
+    make a signification modification to a source file.
+
+commit b4ac7f86fe0ea9c9d38362bdd75caf04c6040cd0
+Author: Gabriel <g2p.code@gmail.com>
+Date:   Fri Mar 15 18:39:55 2013 +0100
+
+    Tests also require the parted binary.
+
+commit 94d8535355aaa8f95754c4229747f81253b8ab9d
+Author: Gabriel <g2p.code@gmail.com>
+Date:   Fri Mar 15 23:55:41 2013 +0100
+
+    Work around Travis's broken defaults.
+    
+    The import-tars branch didn't contain a .travis.yml file and stupid
+    Travis tried and failed to run a ruby rake task for no reason that makes
+    sense.
+
+commit b7db15bf8a5569c82b206783e92a44b1b0fdf658
+Author: Gabriel <g2p.code@gmail.com>
+Date:   Fri Mar 15 18:19:53 2013 +0100
+
+    Add CI with Tox and Travis.
+
+commit a31a32c054f9c3181b1c19a6282de464d49b213f
+Author: Gabriel <g2p.code@gmail.com>
+Date:   Fri Mar 15 18:16:05 2013 +0100
+
+    Add myself to authors.
+
+commit eca6226bb436a7a2a5d257b5adde90c8b9d6a26e
+Author: Gabriel <g2p.code@gmail.com>
+Date:   Fri Mar 15 17:57:09 2013 +0100
+
+    Restore integer division in formatBytes for Python 2 compat.
+
+commit e4505286b3e4da8f948169f5d795aad482f06edd
+Author: Gabriel <g2p.code@gmail.com>
+Date:   Fri Mar 15 17:48:04 2013 +0100
+
+    Accept AttributeError when checking attribute access is disallowed.
+
+commit 2815a4bb026768953fb7fa722e3e4fbd4d6ecd55
+Author: Gabriel <g2p.code@gmail.com>
+Date:   Fri Mar 15 17:43:02 2013 +0100
+
+    Restore the object base classes, those are required for Py2 compat.
+
+commit c29bb1a55104839337424c0821314ff7ffd8aebf
+Author: Gabriel <g2p.code@gmail.com>
+Date:   Fri Mar 15 17:04:47 2013 +0100
+
+    Compiles with -Werror on both Pythons.
+
+commit 96ab65fb467a93a257e3fdc43f06c503f138f588
+Author: Gabriel <g2p.code@gmail.com>
+Date:   Fri Mar 15 17:02:11 2013 +0100
+
+    Compiles with -Werror on Python 3.
+
+commit 833027a8330593bcb8ebb39f6f281074b48326e3
+Author: Gabriel <g2p.code@gmail.com>
+Date:   Fri Mar 15 16:52:18 2013 +0100
+
+    Recognise unicode in freshDisk.
+
+commit e120d943620b51ecad31388ec0bd8c3ca5bbefbb
+Author: Gabriel <g2p.code@gmail.com>
+Date:   Fri Mar 15 16:21:16 2013 +0100
+
+    Fix more comparisons (those didn't have tests).
+
+commit ca1852c88c6ac993e62dc9d30f531952e7e8bff5
+Author: Gabriel <g2p.code@gmail.com>
+Date:   Fri Mar 15 14:43:03 2013 +0100
+
+    Fix comparisons. Those used to crash the testsuite.
+
+commit a448f152e5a7dbef271173aef18a0c788ec1ed73
+Author: Gabriel <g2p.code@gmail.com>
+Date:   Fri Mar 15 14:04:40 2013 +0100
+
+    Mass replace asserts containing comparisons.
+
+commit a624d01464431fb1fbe497f80a6d7a05442d31a2
+Author: Gabriel <g2p.code@gmail.com>
+Date:   Fri Mar 15 13:56:27 2013 +0100
+
+    Tweak an instance test.
+
+commit 3e8ae136336870ca3e52279f829d9887466cc9d5
+Author: Gabriel <g2p.code@gmail.com>
+Date:   Fri Mar 15 13:54:31 2013 +0100
+
+    Mass replace isinstance asserts.
+
+commit 3697581335dcd837bebe4153a65cc4a64e8eeeb3
+Author: Gabriel <g2p.code@gmail.com>
+Date:   Fri Mar 15 13:51:16 2013 +0100
+
+    Use a TP_FLAGS macro for Python 2 compat.
+
+commit a4d105d2c95feee8b2b3a27be3ae5d28d79cedf7
+Author: Gabriel <g2p.code@gmail.com>
+Date:   Fri Mar 15 12:51:09 2013 +0100
+
+    Skip a test that relies on being root.
+
+commit 322a5f7ce7e6c56c883b45bb32eda7c74d52b702
+Author: Gabriel <g2p.code@gmail.com>
+Date:   Fri Mar 15 13:12:59 2013 +0100
+
+    Python 2 PyUnicode_AsUTF8 compat.
+
+commit 254eaacc767af4003b3aae4c39795f57ee59d3bd
+Author: Gabriel <g2p.code@gmail.com>
+Date:   Fri Mar 15 12:27:19 2013 +0100
+
+    Fix unicode -> cstr conversion.
+
+commit a217d08048e4b2491119327552d1fa6ab88bd663
+Author: Gabriel <g2p.code@gmail.com>
+Date:   Fri Mar 15 10:32:56 2013 +0100
+
+    Cleaner stringification test.
+
+commit cb552a8d12427d889bff6e354733ff3524bde357
+Author: Gabriel <g2p.code@gmail.com>
+Date:   Fri Mar 15 10:22:09 2013 +0100
+
+    Fix int types.
+
+commit 3d5d64544a9f910dd0228c9060358d1422d0bc7e
+Author: Gabriel <g2p.code@gmail.com>
+Date:   Fri Mar 15 10:23:53 2013 +0100
+
+    Fix filter.
+
+commit 31ec76ebc904867e862550ee9678cb9d809bd6ab
+Author: Gabriel <g2p.code@gmail.com>
+Date:   Fri Mar 15 10:20:58 2013 +0100
+
+    Fix division.
+
+commit b40be9cb0cef6508bfef83dc86eba109552696df
+Author: Gabriel <g2p.code@gmail.com>
+Date:   Thu Mar 14 23:34:15 2013 +0100
+
+    Mass fix deprecated asserts.
+
+commit 6aab0d3bc24166cc7a1155455185beaca5075746
+Author: Gabriel <g2p.code@gmail.com>
+Date:   Fri Mar 15 10:08:58 2013 +0100
+
+    Fix common test setup.
+
+commit 62d1d97bc772c5ce1643624f8c8ed48d2658661a
+Author: Gabriel <g2p.code@gmail.com>
+Date:   Thu Mar 14 23:24:51 2013 +0100
+
+    Remove the long suffix.
+
+commit b71be83370faf228ede3bbc1a6a493d216ba3a10
+Author: Gabriel <g2p.code@gmail.com>
+Date:   Thu Mar 14 22:46:04 2013 +0100
+
+    Make module definition compatible with Python 2 as well.
+
+commit e78c5f8b607ef9c6c35004e45f1848fc8e082cb8
+Author: Gabriel <g2p.code@gmail.com>
+Date:   Sat Mar 9 00:34:38 2013 +0100
+
+    Use sys.version_info, and advertise 2.7 compat again.
+
+commit 645d80a426e80db6d71c895d884d66607a03b9cc
+Author: Gabriel <g2p.code@gmail.com>
+Date:   Fri Mar 15 18:08:07 2013 +0100
+
+    Make compatible with parted 2.3.
+    
+    Backport two flags.
+
+commit 6e62a95b5878be041152c6877c93cf9672dbda4c
+Author: hayseed <alski85@gmail.com>
+Date:   Fri Jan 25 00:34:37 2013 -0500
+
+    fixed long, old type py classes
+
+commit ce196ae0d9a7bb91577ded6b8d6e8fc3a85c8d6b
+Author: hayseed <alski85@gmail.com>
+Date:   Sat Jan 12 21:00:42 2013 -0500
+
+    fixed alignment and constraints
+
+commit c19e7195489309302ed884d903447d280c28042f
+Author: hayseed <alski85@gmail.com>
+Date:   Sat Jan 5 19:27:40 2013 -0500
+
+    with python 3.3
+
+commit 760a3b7c39a59c2e0f131b40e0a48bdf8240f637
+Author: Chris Tyler <chris@tylers.info>
+Date:   Fri Jan 11 13:42:29 2013 -0500
+
+    Convert Constraint to __ped.Constraint in partition.getMaxGeometry()
+
+commit a43c9ca4e0fb600d425f50d11287f7c4fddee5f3
+Author: Chris Lumens <clumens@redhat.com>
+Date:   Fri Dec 14 13:06:43 2012 -0500
+
+    Do not traceback when calling setlocale (#875354).
+    
+    This is just a debugging luxury.  It's not worth additional tracebacks.
+
+commit 114d9ee779821118d61548b20777ccc8656a3d8e
+Author: David Cantrell <dcantrell@redhat.com>
+Date:   Tue Dec 4 15:01:43 2012 -0500
+
+    New version.
+
+commit e28ac522bf507ee2d9b4f4140acf907e633f0ef9
+Author: David Cantrell <dcantrell@redhat.com>
+Date:   Mon Dec 3 14:33:27 2012 -0500
+
+    Increase minimum GNU parted requirement.
+
+commit 0b182003ed8654eab5c3cf94bd6f4515e7ba65c8
+Author: David Cantrell <dcantrell@redhat.com>
+Date:   Mon Dec 3 14:30:10 2012 -0500
+
+    Update test cases for latest parted release.
+
+commit cefa49c1b8d797bc2ffd30e9f8d39a79cc3b9570
+Author: Brian C. Lane <bcl@redhat.com>
+Date:   Tue Jan 31 13:26:28 2012 -0800
+
+    Add support for new disk flag PED_DISK_GPT_PMBR_BOOT
+    
+    parted can now set the boot flag on the GPT PMBR parition. Add support
+    for this new disk flag.
+
+commit cfb2f83a6a18d2d21b79c7c26cc580c1e2a765a1
+Author: David Cantrell <dcantrell@redhat.com>
+Date:   Wed Jun 29 14:31:37 2011 -0400
+
+    New version.
+
+commit 0400b18c677ec91142f18712dc0cf644a685d984
+Author: David Cantrell <dcantrell@redhat.com>
+Date:   Wed Jun 29 14:30:46 2011 -0400
+
+    Include Makefile in source distribution.
+
+commit a594ac8ad83c243f8764121af327f96ce4c7d494
+Author: David Cantrell <dcantrell@redhat.com>
+Date:   Mon Jun 27 11:39:54 2011 -0400
+
+    Require parted-3.0 or higher.
+
+commit 0c947b4c96f75b1e09a468b6cfb49344d6e36f8f
+Author: David Cantrell <dcantrell@redhat.com>
+Date:   Mon Jun 27 11:25:09 2011 -0400
+
+    New version.
+
+commit 3509a37f7039fff5a45c75e8cfc0247d45b0a28d
+Author: David Cantrell <dcantrell@redhat.com>
+Date:   Mon Jun 27 11:24:43 2011 -0400
+
+    Do not remove dist/ subdirectory in release target.
+
+commit 6bcf89f77fdac332f4c9c7494eace8f5257d1ef6
+Author: David Cantrell <dcantrell@redhat.com>
+Date:   Fri Jun 17 15:06:14 2011 -0400
+
+    Add missing closing paren on Deprecated() usage.
+    
+    The last line of the file was missing a closing paren on the
+    Deprecated() call.
+
+commit 6637661c26c7bd0120facc2c54fbae544031262b
+Author: David Cantrell <dcantrell@redhat.com>
+Date:   Fri Jun 17 15:05:21 2011 -0400
+
+    Remove invalid reference to HAVE_PED_PARTITION_LEGACY_BOOT.
+    
+    We no longer have this define, so remove it.  Upstream GNU parted 3.0
+    and later have PED_PARTITION_LEGACY_BOOT.
+
+commit 8a2b24b9e68b673992178754b276db30ee9ac263
+Author: David Cantrell <dcantrell@redhat.com>
+Date:   Fri Jun 17 13:35:25 2011 -0400
+
+    Remove unnecessary imports from setup.py.
+
+commit 8f69ccb73d7584af2e1e98dbbe8af59bc8dca60e
+Author: David Cantrell <dcantrell@redhat.com>
+Date:   Fri Jun 17 10:26:32 2011 -0400
+
+    Update test cases.
+    
+    Make some changes to the test cases:
+    1) Work with the test discovery feature of the unittest module.
+    2) Create a combined baseclass.py file, remove existing ones.
+    3) Update test cases to work with combined baseclass file.
+    4) Move test cases to one directory level to avoid module import
+       errors when running the test discovery module.
+
+commit 384dd5fa94f734b547a234ad2fa1f163832fff63
+Merge: 49293dc f18ce61
+Author: David Cantrell <dcantrell@redhat.com>
+Date:   Thu Jun 16 17:22:54 2011 -0400
+
+    Move to Python distutils for building.
+
+commit f18ce61914be6a62ddcdeeb0fc6fab625072a147
+Author: David Cantrell <dcantrell@redhat.com>
+Date:   Thu Jun 16 17:17:32 2011 -0400
+
+    Updated RELEASE file with distutils instructions.
+
+commit 479501e17228921e96c5d1fe16eacdb3bd48dcd7
+Author: David Cantrell <dcantrell@redhat.com>
+Date:   Thu Jun 16 16:36:22 2011 -0400
+
+    Add missing closing paren on sys.modules[]/Deprecated line.
+
+commit 8d6b9a3046988e32e7e85fe93ffb6dea98607b26
+Author: David Cantrell <dcantrell@redhat.com>
+Date:   Thu Jun 16 15:54:45 2011 -0400
+
+    Add .gitignore entries specific to distutils build method.
+
+commit 8ea40c2533283ce0e4930065f5ed2f34cb6fc5d5
+Author: David Cantrell <dcantrell@redhat.com>
+Date:   Thu Jun 16 15:42:27 2011 -0400
+
+    Use Python distutils module to drive builds.
+    
+    Dump GNU autoconf and automake in favor of Python distutils.
+
+commit 00527a55cdaab35189d40f7aa6394fa2c0dbad0f
+Author: David Cantrell <dcantrell@redhat.com>
+Date:   Thu Jun 16 15:50:54 2011 -0400
+
+    Remove autoconf and automake entries from .gitignore
+
+commit 3dfeee556abf1878a04f07b3e91c5350fd51760b
+Author: David Cantrell <dcantrell@redhat.com>
+Date:   Thu Jun 16 15:23:53 2011 -0400
+
+    Change VERSION to PYPARTED_VERSION, don't include config.h
+    
+    Changes to _pedmodule.c so it works with the new distutils build system.
+
+commit 271fe0c2c63a0319164a7b32e4b1b8124b436dcf
+Author: David Cantrell <dcantrell@redhat.com>
+Date:   Thu Jun 16 14:49:15 2011 -0400
+
+    Remove GNU autoconf & automake build system files.
+
+commit a1225ba6bb91737fd588d74d8756c8a38f60f0ac
+Author: David Cantrell <dcantrell@redhat.com>
+Date:   Thu Jun 16 14:02:33 2011 -0400
+
+    Update pyparted for compatibility with parted-3.0.
+    
+    Most notable changes:
+    1) GNU parted removed filesystem code, so remove all related functions
+       in that category.  There is still a PedFileSystem type object, which
+       just contains the geometry region where the filesystem exists.
+    2) Removal of test cases related to #1
+    3) No more conditional inclusion of PED_PARTITION_LEGACY_BOOT, just
+       include by default.
+
+commit 49293dc8ebdafede77e461854b016a533365a277
+Author: David Cantrell <dcantrell@redhat.com>
+Date:   Thu Jun 16 14:02:33 2011 -0400
+
+    Update pyparted for compatibility with parted-3.0.
+    
+    Most notable changes:
+    1) GNU parted removed filesystem code, so remove all related functions
+       in that category.  There is still a PedFileSystem type object, which
+       just contains the geometry region where the filesystem exists.
+    2) Removal of test cases related to #1
+    3) No more conditional inclusion of PED_PARTITION_LEGACY_BOOT, just
+       include by default.
+
+commit 8881836b77b2fce86571b6ec1deb2142a14d56d9
+Author: David Cantrell <dcantrell@redhat.com>
+Date:   Thu Jun 16 13:43:15 2011 -0400
+
+    Update autoconf files for use with parted-3.0 release.
+    
+    We no longer need to test for the PED_PARTITION_LEGACY_BOOT flag because
+    it's in the official release now.
+    
+    Also, override LIBS and CFLAGS when testing libparted so it works on
+    systems where parted is installed to a path that's outside of the normal
+    search paths.
+
+commit 676333fb6d789b3d9604e09e2e53f843cfaccd16
+Author: David Cantrell <dcantrell@redhat.com>
+Date:   Thu Jun 16 10:24:41 2011 -0400
+
+    Require libparted >= 3.0
+
 commit a687c9671981c5f06e1a679f5ecf1407bbf21ad6
 Author: David Cantrell <dcantrell@redhat.com>
 Date:   Tue Mar 22 21:55:30 2011 -1000

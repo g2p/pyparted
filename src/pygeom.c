@@ -1,7 +1,7 @@
 /*
  * pygeom.c
  *
- * Copyright (C) 2007, 2008, 2009  Red Hat, Inc.
+ * Copyright (C) 2007-2013 Red Hat, Inc.
  *
  * This copyrighted material is made available to anyone wishing to use,
  * modify, copy, or redistribute it subject to the terms and conditions of
@@ -17,8 +17,9 @@
  * License and may only be used or replicated with the express permission of
  * Red Hat, Inc.
  *
- * Red Hat Author(s): David Cantrell <dcantrell@redhat.com>
- *                    Chris Lumens <clumens@redhat.com>
+ * Author(s): David Cantrell <dcantrell@redhat.com>
+ *            Chris Lumens <clumens@redhat.com>
+ *            Alex Skinner <alex@lx.lc>
  */
 
 #include <Python.h>
@@ -57,7 +58,7 @@ int _ped_Geometry_compare(_ped_Geometry *self, PyObject *obj) {
     }
 
     comp = (_ped_Geometry *) obj;
-    if ((_ped_Geometry_Type_obj.tp_richcompare(self->dev, comp->dev, Py_EQ)) &&
+    if (PyObject_RichCompareBool(self->dev, comp->dev, Py_EQ) &&
         (self->ped_geometry->start == comp->ped_geometry->start) &&
         (self->ped_geometry->length == comp->ped_geometry->length) &&
         (self->ped_geometry->end == comp->ped_geometry->end)) {
@@ -68,18 +69,11 @@ int _ped_Geometry_compare(_ped_Geometry *self, PyObject *obj) {
 }
 
 PyObject *_ped_Geometry_richcompare(_ped_Geometry *a, PyObject *b, int op) {
-    if (op == Py_EQ) {
-        if (!(_ped_Geometry_Type_obj.tp_compare((PyObject *) a, b))) {
-            Py_RETURN_TRUE;
-        } else {
-            Py_RETURN_FALSE;
-        }
-    } else if (op == Py_NE) {
-        if (_ped_Geometry_Type_obj.tp_compare((PyObject *) a, b)) {
-            Py_RETURN_TRUE;
-        } else {
-            Py_RETURN_FALSE;
-        }
+    if (op == Py_EQ || op == Py_NE) {
+        int rv = _ped_Geometry_compare(a, b);
+        if (PyErr_Occurred())
+            return NULL;
+        return PyBool_FromLong(op == Py_EQ ? rv == 0 : rv != 0);
     } else if ((op == Py_LT) || (op == Py_LE) ||
                (op == Py_GT) || (op == Py_GE)) {
         PyErr_SetString(PyExc_TypeError, "comparison operator not supported for _ped.Geometry");
@@ -94,7 +88,7 @@ PyObject *_ped_Geometry_str(_ped_Geometry *self) {
     char *ret = NULL;
     char *dev = NULL;
 
-    dev = PyString_AsString(_ped_Device_Type_obj.tp_repr(self->dev));
+    dev = PyUnicode_AsUTF8(_ped_Device_Type_obj.tp_repr(self->dev));
     if (dev == NULL) {
         return NULL;
     }
@@ -189,11 +183,11 @@ PyObject *_ped_Geometry_get(_ped_Geometry *self, void *closure) {
     }
 
     if (!strcmp(member, "start")) {
-        return PyLong_FromLongLong(self->ped_geometry->start);
+        return PyLong_FromLong(self->ped_geometry->start);
     } else if (!strcmp(member, "length")) {
-        return PyLong_FromLongLong(self->ped_geometry->length);
+        return PyLong_FromLong(self->ped_geometry->length);
     } else if (!strcmp(member, "end")) {
-        return PyLong_FromLongLong(self->ped_geometry->end);
+        return PyLong_FromLong(self->ped_geometry->end);
     } else {
         PyErr_Format(PyExc_AttributeError, "_ped.Geometry object has no attribute %s", member);
         return NULL;
@@ -211,20 +205,20 @@ int _ped_Geometry_set(_ped_Geometry *self, PyObject *value, void *closure) {
     }
 
     if (!strcmp(member, "start")) {
-        val = PyLong_AsLongLong(value);
+        val = PyLong_AsLong(value);
         if (PyErr_Occurred()) {
             return -1;
         }
         ret = ped_geometry_set_start(self->ped_geometry, val);
     } else if (!strcmp(member, "length")) {
-        val = PyLong_AsLongLong(value);
+        val = PyLong_AsLong(value);
         if (PyErr_Occurred()) {
             return -1;
         }
         ret = ped_geometry_set(self->ped_geometry, self->ped_geometry->start,
                                val);
     } else if (!strcmp(member, "end")) {
-        val = PyLong_AsLongLong(value);
+        val = PyLong_AsLong(value);
         if (PyErr_Occurred()) {
             return -1;
         }
@@ -582,7 +576,7 @@ PyObject *py_ped_geometry_read(PyObject *s, PyObject *args) {
         return NULL;
     }
 
-    ret = PyString_FromString(out_buf);
+    ret = PyUnicode_FromString(out_buf);
     free(out_buf);
 
     return ret;
@@ -723,7 +717,7 @@ PyObject *py_ped_geometry_check(PyObject *s, PyObject *args) {
     ped_timer_destroy(out_timer);
     free(out_buf);
 
-    return PyLong_FromLongLong(ret);
+    return PyLong_FromLong(ret);
 }
 
 PyObject *py_ped_geometry_map(PyObject *s, PyObject *args) {

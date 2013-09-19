@@ -5,7 +5,7 @@
  * Python module that implements the libparted functionality via Python
  * classes and other high level language features.
  *
- * Copyright (C) 2007, 2008 Red Hat, Inc.
+ * Copyright (C) 2007-2013 Red Hat, Inc.
  *
  * This copyrighted material is made available to anyone wishing to use,
  * modify, copy, or redistribute it subject to the terms and conditions of
@@ -21,8 +21,9 @@
  * License and may only be used or replicated with the express permission of
  * Red Hat, Inc.
  *
- * Red Hat Author(s): David Cantrell <dcantrell@redhat.com>
- *                    Chris Lumens <clumens@redhat.com>
+ * Author(s): David Cantrell <dcantrell@redhat.com>
+ *            Chris Lumens <clumens@redhat.com>
+ *            Alex Skinner <alex@lx.lc>
  */
 
 #include <Python.h>
@@ -41,7 +42,13 @@
 #include "pytimer.h"
 #include "pyunit.h"
 
-#include "config.h"
+#if PED_DISK_LAST_FLAG < 2
+#define PED_DISK_GPT_PMBR_BOOT 2
+#endif
+
+#if PED_PARTITION_LAST_FLAG < 15
+#define PED_PARTITION_LEGACY_BOOT 15
+#endif
 
 char *partedExnMessage = NULL;
 unsigned int partedExnRaised = 0;
@@ -155,6 +162,11 @@ PyDoc_STRVAR(disk_new_fresh_doc,
 "will have to use the commit_to_dev() method to write the new label to\n"
 "the disk.");
 
+PyDoc_STRVAR(disk_new_doc,
+"disk_new(Device) -> Disk\n\n"
+"Given the Device, create a new Disk object. And probe, read the details of\n"
+"the disk.");
+
 PyDoc_STRVAR(disk_flag_get_name_doc,
 "disk_flag_get_name(integer) -> string\n\n"
 "Return a name for a disk flag constant.  If an invalid flag is provided,\n"
@@ -245,6 +257,8 @@ static struct PyMethodDef PyPedModuleMethods[] = {
                             METH_VARARGS, partition_flag_next_doc},
     {"disk_new_fresh", (PyCFunction) py_ped_disk_new_fresh,
                        METH_VARARGS, disk_new_fresh_doc},
+    {"disk_new", (PyCFunction) py_ped_disk_new,
+                       METH_VARARGS, disk_new_doc},
     {"disk_flag_get_name", (PyCFunction) py_ped_disk_flag_get_name,
                                 METH_VARARGS, disk_flag_get_name_doc},
     {"disk_flag_get_by_name", (PyCFunction) py_ped_disk_flag_get_by_name,
@@ -275,20 +289,39 @@ static struct PyMethodDef PyPedModuleMethods[] = {
     { NULL, NULL, 0, NULL }
 };
 
+#if PY_MAJOR_VERSION >= 3
+#define MOD_INIT(name) PyMODINIT_FUNC PyInit_##name(void)
+#define MOD_ERROR_VAL NULL
+#define MOD_SUCCESS_VAL(val) val
+
+struct PyModuleDef module_def = {
+     PyModuleDef_HEAD_INIT,
+     "_ped",
+     _ped_doc,
+     -1,
+     PyPedModuleMethods,
+        NULL, NULL, NULL, NULL
+    };
+#else
+#define MOD_INIT(name) PyMODINIT_FUNC init##name(void)
+#define MOD_ERROR_VAL
+#define MOD_SUCCESS_VAL(val)
+#endif
+
 PyObject *py_libparted_get_version(PyObject *s, PyObject *args) {
     char *ret = (char *) ped_get_version();
 
     if (ret != NULL)
-        return PyString_FromString(ret);
+        return PyUnicode_FromString(ret);
     else
-        return PyString_FromString("");
+        return PyUnicode_FromString("");
 }
 
 PyObject *py_pyparted_version(PyObject *s, PyObject *args) {
     int t = 0;
     int major = -1, minor = -1, update = -1;
     char suffix[11];
-    char *v = VERSION;
+    char *v = PYPARTED_VERSION;
 
     /* Read pyparted version string.  Support the following formats:
      *     X
@@ -386,11 +419,15 @@ static PedExceptionOption partedExnHandler(PedException *e) {
     return PED_EXCEPTION_IGNORE;
 }
 
-PyMODINIT_FUNC init_ped(void) {
+MOD_INIT(_ped) {
     PyObject *m = NULL;
 
     /* init the main Python module and add methods */
+#if PY_MAJOR_VERSION >= 3
+    m = PyModule_Create(&module_def);
+#else
     m = Py_InitModule3("_ped", PyPedModuleMethods, _ped_doc);
+#endif
 
     /* PedUnit possible values */
     PyModule_AddIntConstant(m, "UNIT_SECTOR", PED_UNIT_SECTOR);
@@ -410,7 +447,7 @@ PyMODINIT_FUNC init_ped(void) {
 
     /* add PedCHSGeometry type as _ped.CHSGeometry */
     if (PyType_Ready(&_ped_CHSGeometry_Type_obj) < 0)
-        return;
+        return MOD_ERROR_VAL;
 
     Py_INCREF(&_ped_CHSGeometry_Type_obj);
     PyModule_AddObject(m, "CHSGeometry",
@@ -418,7 +455,7 @@ PyMODINIT_FUNC init_ped(void) {
 
     /* add PedDevice type as _ped.Device */
     if (PyType_Ready(&_ped_Device_Type_obj) < 0)
-        return;
+        return MOD_ERROR_VAL;
 
     Py_INCREF(&_ped_Device_Type_obj);
     PyModule_AddObject(m, "Device", (PyObject *)&_ped_Device_Type_obj);
@@ -442,49 +479,49 @@ PyMODINIT_FUNC init_ped(void) {
 
     /* add PedTimer type as _ped.Timer */
     if (PyType_Ready(&_ped_Timer_Type_obj) < 0)
-        return;
+        return MOD_ERROR_VAL;
 
     Py_INCREF(&_ped_Timer_Type_obj);
     PyModule_AddObject(m, "Timer", (PyObject *)&_ped_Timer_Type_obj);
 
     /* add PedGeometry type as _ped.Geometry */
     if (PyType_Ready(&_ped_Geometry_Type_obj) < 0)
-        return;
+        return MOD_ERROR_VAL;
 
     Py_INCREF(&_ped_Geometry_Type_obj);
     PyModule_AddObject(m, "Geometry", (PyObject *)&_ped_Geometry_Type_obj);
 
     /* add PedAlignment type as _ped.Alignment */
     if (PyType_Ready(&_ped_Alignment_Type_obj) < 0)
-        return;
+        return MOD_ERROR_VAL;
 
     Py_INCREF(&_ped_Alignment_Type_obj);
     PyModule_AddObject(m, "Alignment", (PyObject *)&_ped_Alignment_Type_obj);
 
     /* add PedConstraint type as _ped.Constraint */
     if (PyType_Ready(&_ped_Constraint_Type_obj) < 0)
-        return;
+        return MOD_ERROR_VAL;
 
     Py_INCREF(&_ped_Constraint_Type_obj);
     PyModule_AddObject(m, "Constraint", (PyObject *)&_ped_Constraint_Type_obj);
 
     /* add PedPartition type as _ped.Partition */
     if (PyType_Ready(&_ped_Partition_Type_obj) < 0)
-        return;
+        return MOD_ERROR_VAL;
 
     Py_INCREF(&_ped_Partition_Type_obj);
     PyModule_AddObject(m, "Partition", (PyObject *)&_ped_Partition_Type_obj);
 
     /* add PedDisk as _ped.Disk */
     if (PyType_Ready(&_ped_Disk_Type_obj) < 0)
-        return;
+        return MOD_ERROR_VAL;
 
     Py_INCREF(&_ped_Disk_Type_obj);
     PyModule_AddObject(m, "Disk", (PyObject *)&_ped_Disk_Type_obj);
 
     /* add PedDiskType as _ped.DiskType */
     if (PyType_Ready(&_ped_DiskType_Type_obj) < 0)
-        return;
+        return MOD_ERROR_VAL;
 
     Py_INCREF(&_ped_DiskType_Type_obj);
     PyModule_AddObject(m, "DiskType", (PyObject *)&_ped_DiskType_Type_obj);
@@ -511,18 +548,17 @@ PyMODINIT_FUNC init_ped(void) {
     PyModule_AddIntConstant(m, "PARTITION_APPLE_TV_RECOVERY", PED_PARTITION_APPLE_TV_RECOVERY);
     PyModule_AddIntConstant(m, "PARTITION_BIOS_GRUB", PED_PARTITION_BIOS_GRUB);
     PyModule_AddIntConstant(m, "PARTITION_DIAG", PED_PARTITION_DIAG);
-#ifdef HAVE_PED_PARTITION_LEGACY_BOOT
     PyModule_AddIntConstant(m, "PARTITION_LEGACY_BOOT", PED_PARTITION_LEGACY_BOOT);
-#endif
 
     PyModule_AddIntConstant(m, "DISK_CYLINDER_ALIGNMENT", PED_DISK_CYLINDER_ALIGNMENT);
+    PyModule_AddIntConstant(m, "DISK_GPT_PMBR_BOOT", PED_DISK_GPT_PMBR_BOOT);
 
     PyModule_AddIntConstant(m, "DISK_TYPE_EXTENDED", PED_DISK_TYPE_EXTENDED);
     PyModule_AddIntConstant(m, "DISK_TYPE_PARTITION_NAME", PED_DISK_TYPE_PARTITION_NAME);
 
     /* add PedFileSystemType as _ped.FileSystemType */
     if (PyType_Ready(&_ped_FileSystemType_Type_obj) < 0)
-        return;
+        return MOD_ERROR_VAL;
 
     Py_INCREF(&_ped_FileSystemType_Type_obj);
     PyModule_AddObject(m, "FileSystemType",
@@ -530,7 +566,7 @@ PyMODINIT_FUNC init_ped(void) {
 
     /* add PedFileSystem as _ped.FileSystem */
     if (PyType_Ready(&_ped_FileSystem_Type_obj) < 0)
-        return;
+        return MOD_ERROR_VAL;
 
     Py_INCREF(&_ped_FileSystem_Type_obj);
     PyModule_AddObject(m, "FileSystem", (PyObject *)&_ped_FileSystem_Type_obj);
@@ -605,6 +641,7 @@ PyMODINIT_FUNC init_ped(void) {
 
     /* Set up our libparted exception handler. */
     ped_exception_set_handler(partedExnHandler);
+    return MOD_SUCCESS_VAL(m);
 }
 
 /* vim:tw=78:ts=4:et:sw=4

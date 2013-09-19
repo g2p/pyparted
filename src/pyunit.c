@@ -1,7 +1,7 @@
 /*
  * pyunit.c
  *
- * Copyright (C) 2007, 2008, 2009  Red Hat, Inc.
+ * Copyright (C) 2007-2013 Red Hat, Inc.
  *
  * This copyrighted material is made available to anyone wishing to use,
  * modify, copy, or redistribute it subject to the terms and conditions of
@@ -17,8 +17,9 @@
  * License and may only be used or replicated with the express permission of
  * Red Hat, Inc.
  *
- * Red Hat Author(s): David Cantrell <dcantrell@redhat.com>
- *                    Chris Lumens <clumens@redhat.com>
+ * Author(s): David Cantrell <dcantrell@redhat.com>
+ *            Chris Lumens <clumens@redhat.com>
+ *            Alex Skinner <alex@lx.lc>
  */
 
 #include <Python.h>
@@ -48,7 +49,7 @@ PyObject *py_ped_unit_set_default(PyObject *s, PyObject *args) {
 }
 
 PyObject *py_ped_unit_get_default(PyObject *s, PyObject *args) {
-    return PyLong_FromLongLong(ped_unit_get_default());
+    return PyLong_FromLong(ped_unit_get_default());
 }
 
 PyObject *py_ped_unit_get_size(PyObject *s, PyObject *args) {
@@ -84,7 +85,7 @@ PyObject *py_ped_unit_get_size(PyObject *s, PyObject *args) {
         return NULL;
     }
 
-    return PyLong_FromLongLong(ret);
+    return PyLong_FromLong(ret);
 }
 
 PyObject *py_ped_unit_get_name(PyObject *s, PyObject *args) {
@@ -106,9 +107,9 @@ PyObject *py_ped_unit_get_name(PyObject *s, PyObject *args) {
      */
     name = ped_unit_get_name(unit);
     if (name != NULL) {
-        return PyString_FromString(name);
+        return PyUnicode_FromString(name);
     } else {
-        return PyString_FromString("");
+        return PyUnicode_FromString("");
     }
 }
 
@@ -152,10 +153,10 @@ PyObject *py_ped_unit_format_custom_byte(PyObject *s, PyObject *args) {
 
     pedret = ped_unit_format_custom_byte(out_dev, sector, unit);
     if (pedret != NULL) {
-        ret = PyString_FromString(pedret);
+        ret = PyUnicode_FromString(pedret);
         free(pedret);
     } else {
-        ret = PyString_FromString("");
+        ret = PyUnicode_FromString("");
     }
 
     return ret;
@@ -178,10 +179,10 @@ PyObject *py_ped_unit_format_byte(PyObject *s, PyObject *args) {
 
     pedret = ped_unit_format_byte(out_dev, sector);
     if (pedret != NULL) {
-        ret = PyString_FromString(pedret);
+        ret = PyUnicode_FromString(pedret);
         free(pedret);
     } else {
-        ret = PyString_FromString("");
+        ret = PyUnicode_FromString("");
     }
 
     return ret;
@@ -205,10 +206,10 @@ PyObject *py_ped_unit_format_custom(PyObject *s, PyObject *args) {
 
     pedret = ped_unit_format_custom(out_dev, sector, unit);
     if (pedret != NULL) {
-        ret = PyString_FromString(pedret);
+        ret = PyUnicode_FromString(pedret);
         free(pedret);
     } else {
-        ret = PyString_FromString("");
+        ret = PyUnicode_FromString("");
     }
 
     return ret;
@@ -231,10 +232,10 @@ PyObject *py_ped_unit_format(PyObject *s, PyObject *args) {
 
     pedret = ped_unit_format(out_dev, sector);
     if (pedret != NULL) {
-        ret = PyString_FromString(pedret);
+        ret = PyUnicode_FromString(pedret);
         free(pedret);
     } else {
-        ret = PyString_FromString("");
+        ret = PyUnicode_FromString("");
     }
 
     return ret;

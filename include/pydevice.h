@@ -2,7 +2,7 @@
  * pydevice.h
  * pyparted type definitions for pydevice.c
  *
- * Copyright (C) 2007, 2008, 2009  Red Hat, Inc.
+ * Copyright (C) 2007-2013 Red Hat, Inc.
  *
  * This copyrighted material is made available to anyone wishing to use,
  * modify, copy, or redistribute it subject to the terms and conditions of
@@ -18,7 +18,8 @@
  * License and may only be used or replicated with the express permission of
  * Red Hat, Inc.
  *
- * Red Hat Author(s): David Cantrell <dcantrell@redhat.com>
+ * Author(s): David Cantrell <dcantrell@redhat.com>
+ *            Alex Skinner <alex@lx.lc>
  */
 
 #ifndef PYDEVICE_H_INCLUDED
@@ -104,8 +105,6 @@ PyObject *py_ped_device_get_minimal_aligned_constraint(PyObject *, PyObject *);
 PyObject *py_ped_device_get_optimal_aligned_constraint(PyObject *, PyObject *);
 PyObject *py_ped_device_get_minimum_alignment(PyObject *, PyObject *);
 PyObject *py_ped_device_get_optimum_alignment(PyObject *, PyObject *);
-PyObject *py_ped_file_system_get_create_constraint(PyObject *, PyObject *);
-PyObject *py_ped_file_system_get_copy_constraint(PyObject *, PyObject *);
 PyObject *py_ped_unit_get_size(PyObject *, PyObject *);
 PyObject *py_ped_unit_format_custom_byte(PyObject *, PyObject *);
 PyObject *py_ped_unit_format_byte(PyObject *, PyObject *);

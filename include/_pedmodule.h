@@ -1,7 +1,7 @@
 /*
  * _pedmodule.h
  *
- * Copyright (C) 2007, 2008, 2009  Red Hat, Inc.
+ * Copyright (C) 2007-2013 Red Hat, Inc.
  *
  * This copyrighted material is made available to anyone wishing to use,
  * modify, copy, or redistribute it subject to the terms and conditions of
@@ -17,7 +17,8 @@
  * License and may only be used or replicated with the express permission of
  * Red Hat, Inc.
  *
- * Red Hat Author(s): David Cantrell <dcantrell@redhat.com>
+ * Author(s): David Cantrell <dcantrell@redhat.com>
+ *            Alex Skinner <alex@lx.lc>
  */
 
 #ifndef _PARTEDMODULE_H_INCLUDED
@@ -27,7 +28,7 @@
 
 extern PyObject *py_libparted_get_version(PyObject *, PyObject *);
 extern PyObject *py_pyparted_version(PyObject *, PyObject *);
-extern PyMODINIT_FUNC init_ped(void);
+extern PyMODINIT_FUNC PyInit__ped(void);
 
 #endif /* _PARTEDMODULE_H_INCLUDED */
 

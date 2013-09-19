@@ -2,7 +2,7 @@
 # partition.py
 # Python bindings for libparted (built on top of the _ped Python module).
 #
-# Copyright (C) 2009 Red Hat, Inc.
+# Copyright (C) 2009-2013 Red Hat, Inc.
 #
 # This copyrighted material is made available to anyone wishing to use,
 # modify, copy, or redistribute it subject to the terms and conditions of
@@ -18,8 +18,9 @@
 # License and may only be used or replicated with the express permission of
 # Red Hat, Inc.
 #
-# Red Hat Author(s): Chris Lumens <clumens@redhat.com>
-#                    David Cantrell <dcantrell@redhat.com>
+# Author(s): Chris Lumens <clumens@redhat.com>
+#            David Cantrell <dcantrell@redhat.com>
+#            Alex Skinner <alex@lx.lc>
 #
 
 import math
@@ -29,7 +30,7 @@ import warnings
 import _ped
 import parted
 
-from decorators import localeC
+from .decorators import localeC
 
 # XXX: add docstrings
 
@@ -38,11 +39,11 @@ class Partition(object):
     def __init__(self, disk=None, type=None, fs=None, geometry=None, PedPartition=None):
         if PedPartition is None:
             if disk is None:
-                raise parted.PartitionException, "no disk specified"
+                raise parted.PartitionException("no disk specified")
             elif type is None:
-                raise parted.PartitionException, "no type specified"
+                raise parted.PartitionException("no type specified")
             elif geometry is None:
-                raise parted.PartitionException, "no geometry specified"
+                raise parted.PartitionException("no geometry specified")
 
             self._fileSystem = fs
             self._geometry = geometry
@@ -96,7 +97,7 @@ class Partition(object):
         return s
 
     def __writeOnly(self, property):
-        raise parted.WriteOnlyProperty, property
+        raise parted.WriteOnlyProperty(property)
 
     @property
     @localeC
@@ -166,7 +167,7 @@ class Partition(object):
     def getMaxGeometry(self, constraint):
         """Given a constraint, return the maximum Geometry that self can be
            grown to.  Raises Partitionexception on error."""
-        return parted.Geometry(PedGeometry=self.disk.getPedDisk().get_max_partition_geometry(self.__partition, constraint))
+        return parted.Geometry(PedGeometry=self.disk.getPedDisk().get_max_partition_geometry(self.__partition, constraint.getPedConstraint()))
 
     @localeC
     def isFlagAvailable(self, flag):
@@ -224,7 +225,7 @@ class Partition(object):
         lunit = unit.lower()
 
         if lunit not in parted._exponent.keys():
-            raise SyntaxError, "invalid unit %s given" % (unit,)
+            raise SyntaxError("invalid unit %s given" % (unit))
 
         maxLength = self.geometry.length
         sectorSize = self.geometry.device.sectorSize

@@ -2,7 +2,7 @@
  * pygeom.h
  * pyparted type objects for pygeom.c
  *
- * Copyright (C) 2007, 2008, 2009  Red Hat, Inc.
+ * Copyright (C) 2007-2013 Red Hat, Inc.
  *
  * This copyrighted material is made available to anyone wishing to use,
  * modify, copy, or redistribute it subject to the terms and conditions of
@@ -18,8 +18,9 @@
  * License and may only be used or replicated with the express permission of
  * Red Hat, Inc.
  *
- * Red Hat Author(s): David Cantrell <dcantrell@redhat.com>
- *                    Chris Lumens <clumens@redhat.com>
+ * Author(s): David Cantrell <dcantrell@redhat.com>
+ *            Chris Lumens <clumens@redhat.com>
+ *            Alex Skinner <alex@lx.lc>
  */
 
 #ifndef TYPEOBJECTS_PYGEOM_H_INCLUDED
@@ -84,14 +85,13 @@ static PyGetSetDef _ped_Geometry_getset[] = {
 };
 
 PyTypeObject _ped_Geometry_Type_obj = {
-    PyObject_HEAD_INIT(&PyType_Type)
+    PyVarObject_HEAD_INIT(&PyType_Type,0)
     .tp_name = "_ped.Geometry",
     .tp_basicsize = sizeof(_ped_Geometry),
  /* .tp_itemsize = XXX */
     .tp_dealloc = (destructor) _ped_Geometry_dealloc,
  /* .tp_getattr = XXX */
  /* .tp_setattr = XXX */
-    .tp_compare = (cmpfunc) _ped_Geometry_compare,
  /* .tp_repr = XXX */
  /* .tp_as_number = XXX */
  /* .tp_as_sequence = XXX */
@@ -102,8 +102,7 @@ PyTypeObject _ped_Geometry_Type_obj = {
     .tp_getattro = PyObject_GenericGetAttr,
     .tp_setattro = PyObject_GenericSetAttr,
  /* .tp_as_buffer = XXX */
-    .tp_flags = Py_TPFLAGS_HAVE_CLASS | Py_TPFLAGS_BASETYPE |
-                Py_TPFLAGS_HAVE_GC | Py_TPFLAGS_HAVE_RICHCOMPARE,
+    .tp_flags = TP_FLAGS,
     .tp_doc = _ped_Geometry_doc,
     .tp_traverse = (traverseproc) _ped_Geometry_traverse,
     .tp_clear = (inquiry) _ped_Geometry_clear,
